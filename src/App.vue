@@ -1,3 +1,11 @@
+<script setup>
+import menuPanel from './components/menu.vue'
+import main_page from './components/main_page.vue'
+</script>
+
 <template>
-  <h1 className="text-3xl font-bold underline">Hello world!</h1>
+  <div class="flex">
+    <menuPanel />
+    <main_page />
+  </div>
 </template>
