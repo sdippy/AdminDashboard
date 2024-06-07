@@ -1,5 +1,8 @@
 <script setup>
 import { ref, onMounted, computed, provide } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 import BarChart_component from './BarChart.vue'
 import RingChart_component from './RingChart.vue'
@@ -69,10 +72,10 @@ const totalRevenue = computed(() => {
           <h2 class="text-[#efefef] font-bold text-[20px]">Заказов</h2>
           <span class="text-[#efefef] font-bold text-[40px]">{{ ordersNumber }}</span>
           <div class="flex justify-end">
-            <a
-              href="#"
+            <router-link
+              to="/order"
               class="text-[#efefef] font-bold text-[15px] text-right mr-[20px] border-b border-transparent hover:border-b hover:border-[#efefef] transition-all ease-in-out"
-              >Детали ➔</a
+              >Детали ➔</router-link
             >
           </div>
         </div>
@@ -120,10 +123,10 @@ const totalRevenue = computed(() => {
       >
         <div class="w-full flex justify-between">
           <h2 class="text-[#efefef] font-bold text-[20px]">Заказы</h2>
-          <a
-            href="#"
+          <router-link
+            to="/order"
             class="text-[#efefef] font-light text-[16px] border-b border-transparent hover:border-[#efefef] transition-all ease-in-out"
-            >Посмотреть все</a
+            >Посмотреть все</router-link
           >
         </div>
         <div class="w-full flex text-[#B9B9B9] font-light text-[16px]">

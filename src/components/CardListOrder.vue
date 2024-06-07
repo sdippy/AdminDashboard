@@ -16,6 +16,10 @@ defineProps({
       :total-price="item.totalPrice"
       :delivery="item.DeliveryProcess"
       :userId="item.userId"
+      :City="item.City"
+      :Address="item.Address"
+      :Zip="item.Zip"
+      :TotalOrder="item.TotalOrder"
     />
   </div>
 </template>

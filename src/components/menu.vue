@@ -18,7 +18,7 @@
             />
           </svg>
 
-          <a href="#" class="link">Главная страница</a>
+          <router-link to="/" class="link w-fit">Главная страница</router-link>
         </div>
         <div class="flex items-center gap-[10px] link_group1">
           <svg
@@ -41,7 +41,7 @@
             />
           </svg>
 
-          <a href="#" class="link hover:text-[#B9B9B9]">Заказы</a>
+          <router-link to="/Order" class="link hover:text-[#B9B9B9]">Заказы</router-link>
         </div>
         <div class="flex items-center gap-[10px] link_group">
           <svg
@@ -86,7 +86,9 @@
             />
           </svg>
 
-          <a href="#" class="link hover:text-[#B9B9B9]">Категории товаров</a>
+          <router-link to="/category" class="link hover:text-[#B9B9B9]"
+            >Категории товаров</router-link
+          >
         </div>
         <div class="flex items-center gap-[10px] link_group">
           <svg

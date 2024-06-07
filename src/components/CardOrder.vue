@@ -9,7 +9,11 @@ const props = defineProps({
   date: String,
   totalPrice: Number,
   delivery: String,
-  userId: String
+  userId: String,
+  City: String,
+  Address: String,
+  Zip: String,
+  TotalOrder: Number
 })
 
 const user = ref([])
@@ -40,9 +44,15 @@ onMounted(async () => {
       onClickOrder({
         id,
         date,
-        totalPrice,
         delivery,
-        userId
+        totalPrice,
+        TotalOrder,
+        delivery,
+        userId,
+        City,
+        Address,
+        Zip,
+        fullName
       })
     "
     class="order w-full flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"

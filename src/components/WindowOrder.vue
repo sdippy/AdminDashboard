@@ -9,7 +9,7 @@ const { selectedOrder, closeOrderWindow } = inject('order')
     class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-30"
   ></div>
   <div
-    class="orderWindow fixed h-full w-full 2xl:h-5/6 2xl:max-h-[1200px] 2xl:w-4/12 2xl:max-w-[1200px] inset-2/4 -translate-x-2/4 -translate-y-2/4 z-20"
+    class="orderWindow fixed h-full w-full 2xl:h-4/6 2xl:max-h-[800px] 2xl:w-4/12 2xl:max-w-[1200px] inset-2/4 -translate-x-2/4 -translate-y-2/4 z-20"
   >
     <div class="w-full h-full">
       <!-- very-small -->
@@ -34,7 +34,60 @@ const { selectedOrder, closeOrderWindow } = inject('order')
           </svg>
         </div>
         <div class="h-full w-full flex flex-col">
-          <div class="w-full h-full flex-1"></div>
+          <div class="w-full h-full flex-1 flex-col">
+            <div class="grid grid-cols-3 grid-rows-1 gap-2">
+              <div class="flex flex-col gap-5">
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Заказ #</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">ФИО заказчика:</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Адрес:</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Дата заказа:</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Сумма заказа:</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Статус заказа:</p>
+              </div>
+              <div class="flex flex-col gap-5 col-span-2">
+                <input
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                  :value="selectedOrder.id"
+                />
+                <input
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                  :value="selectedOrder.fullName"
+                />
+                <input
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                  :value="
+                    selectedOrder.City + ', ' + selectedOrder.Address + ', ' + selectedOrder.Zip
+                  "
+                />
+                <input
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                  :value="selectedOrder.date"
+                />
+                <input
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                  :value="selectedOrder.totalPrice + ' ₽'"
+                />
+                <select
+                  v-model="selectedOrder.delivery"
+                  class="bg-[#383838] h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                >
+                  <option value="Ожидает подтверждения">Ожидает подтверждения</option>
+                  <option value="Заказ отправлен">Заказ отправлен</option>
+                  <option value="Заказ получен">Заказ получен</option>
+                </select>
+              </div>
+            </div>
+          </div>
           <div class="w-full h-[40px] grid grid-cols-2 grid-rows-1 gap-5">
             <button
               class="bg-[#145F37] text-[#efefef] font-light text-[16px] border border-transparent rounded-[10px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#145F37] active:border-[#145F37] transition-all ease-in-out"
