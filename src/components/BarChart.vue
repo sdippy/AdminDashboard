@@ -12,13 +12,13 @@ onMounted(() => {
   new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль'],
       datasets: [
         {
-          label: 'Dataset 1',
+          label: 'Покупки',
           data: [65, 59, 80, 81, 56, 55, 40],
-          backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
-          borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+          backgroundColor: ['rgba(217, 79, 95, 1)', 'rgba(61, 44, 141, 1)'],
+          borderColor: ['rgba(217, 79, 95, 1)', 'rgba(61, 44, 141, 1)'],
           borderWidth: 1
         }
       ]
@@ -35,14 +35,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="h-[300px] w-full mx-auto">
-    <canvas ref="chartCanvas"></canvas>
+  <div class="h-[300px] w-full flex justify-center items-center">
+    <canvas ref="chartCanvas" style="width: 100%; height: 100%"></canvas>
   </div>
 </template>
 
 <style scoped>
 .chart-container {
   position: relative;
-  height: 300px;
 }
 </style>
