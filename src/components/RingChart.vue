@@ -1,6 +1,8 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, watch, onMounted, defineProps } from 'vue'
 import { Chart, registerables } from 'chart.js'
+
+const chartCanvas = ref(null)
 
 const props = defineProps({
   totalRevenue: {
@@ -9,31 +11,19 @@ const props = defineProps({
   }
 })
 
-// const total = ref(0)
-// total.value = props.totalRevenue
-// console.log(props)
-// console.log(props.totalRevenue)
-// console.log(props.totalRevenue)
-
-const totalRevenue = computed(() => props.totalRevenue)
-console.log(totalRevenue.value)
-console.log(totalRevenue.value)
-
 // Регистрируем компоненты Chart.js
 Chart.register(...registerables)
 
-const chartCanvas = ref(null)
-
 onMounted(() => {
   const ctx = chartCanvas.value.getContext('2d')
-  new Chart(ctx, {
+  const chart = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels: ['Текущее значение', 'Осталось до цели'],
       datasets: [
         {
           label: 'Progress',
-          data: [totalRevenue.value, 1000000 - totalRevenue.value], // Текущее значение и оставшееся до цели (например, 300 текущего и 200 оставшегося)
+          data: [props.totalRevenue, 1000000 - props.totalRevenue], // Текущее значение и оставшееся до цели (например, 300 текущего и 200 оставшегося)
           backgroundColor: ['rgba(29, 115, 70, 1)', 'rgba(113, 26, 92, 1)'],
           borderColor: ['rgba(113, 26, 92, 1)', 'rgba(29, 115, 70, 1)'],
           borderWidth: 1
@@ -53,6 +43,15 @@ onMounted(() => {
       }
     }
   })
+
+  // Подписываемся на изменения totalRevenue и обновляем диаграмму
+  watch(
+    () => props.totalRevenue,
+    (newValue, oldValue) => {
+      chart.data.datasets[0].data = [newValue, 1000000 - newValue]
+      chart.update()
+    }
+  )
 })
 </script>
 
@@ -65,7 +64,7 @@ onMounted(() => {
 <style scoped>
 .chart-container {
   position: relative;
-  height: 95%; /* Устанавливаем высоту контейнера */
-  width: 100%; /* Устанавливаем ширину контейнера */
+  height: 95%;
+  width: 100%;
 }
 </style>

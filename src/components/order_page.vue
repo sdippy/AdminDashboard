@@ -4,6 +4,7 @@ import { ref, onMounted, provide } from 'vue'
 import axios from 'axios'
 
 import CardListOrder from './CardListOrder.vue'
+import WindowOrder from './WindowOrder.vue'
 
 const orders = ref([])
 const ordersNumber = ref(0)
@@ -11,16 +12,34 @@ const selectedOrder = ref(null) // Переменная для хранения 
 
 const updateSelectedOrder = (order) => {
   selectedOrder.value = order
-  console.log(selectedOrder.value)
+  // console.log(selectedOrder.value)
 }
 
 const onClickOrder = (order) => {
   updateSelectedOrder(order)
+  openOrderWindow()
+}
+
+const orderWindowOpen = ref(false)
+
+const closeOrderWindow = async () => {
+  orderWindowOpen.value = false
+  document.body.style.overflow = ''
+  document.body.style.paddingRight = ''
+  load()
+}
+
+const openOrderWindow = () => {
+  load()
+  orderWindowOpen.value = true
+  document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`
+  document.body.style.overflow = 'hidden'
 }
 
 provide('order', {
   onClickOrder,
-  selectedOrder
+  selectedOrder,
+  closeOrderWindow
 })
 
 const fetchOrders = async () => {
@@ -36,18 +55,23 @@ const fetchOrders = async () => {
   }
 }
 
+const load = async () => {
+  await fetchOrders()
+}
+
 onMounted(async () => {
   await fetchOrders()
 })
 </script>
 
 <template>
+  <WindowOrder v-if="orderWindowOpen" />
   <div class="h-svh min-h-[700px] w-full p-10">
     <div class="w-full h-full flex flex-col gap-5">
       <div class="w-full flex flex-col p-5 gap-5 h-[150px] bg-[#2C2C2C] rounded-[30px]"></div>
 
       <div
-        class="bg-[#2C2C2C] h-full rounded-[30px] hover:shadow-2xl hover:-translate-y-1 transition-all ease-in-out flex flex-col p-5 gap-5"
+        class="bg-[#2C2C2C] h-full rounded-[30px] hover:shadow-2xl transition-all ease-in-out flex flex-col p-5 gap-5"
       >
         <div class="w-full flex justify-between">
           <h2 class="text-[#efefef] font-bold text-[20px]">Заказы</h2>
