@@ -1,6 +1,62 @@
 <script setup>
+import { ref, onMounted, computed, provide } from 'vue'
+
 import BarChart_component from './BarChart.vue'
 import RingChart_component from './RingChart.vue'
+
+import axios from 'axios'
+
+import CardListOrder from './CardListOrder.vue'
+
+const orders = ref([])
+const ordersNumber = ref(0)
+const usersNumber = ref(0)
+const selectedOrder = ref(null) // Переменная для хранения информации о выбранном заказе
+
+const updateSelectedOrder = (order) => {
+  selectedOrder.value = order
+}
+
+const onClickOrder = (order) => {
+  updateSelectedOrder(order)
+}
+
+provide('order', {
+  onClickOrder,
+  selectedOrder
+})
+
+const fetchOrders = async () => {
+  try {
+    const { data } = await axios.get(`http://localhost:3000/orders`)
+
+    orders.value = data.map((order) => ({
+      ...order
+    }))
+    ordersNumber.value = data.length
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const totalRevenue = computed(() => {
+  return orders.value.reduce((acc, order) => acc + (order.totalPrice || 0), 0)
+})
+
+const fetchUsers = async () => {
+  try {
+    const { data } = await axios.get(`http://localhost:3000/users`)
+
+    usersNumber.value = data.length
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+onMounted(async () => {
+  await fetchOrders()
+  await fetchUsers()
+})
 </script>
 
 <template>
@@ -11,7 +67,7 @@ import RingChart_component from './RingChart.vue'
           class="order flex flex-col h-[140px] rounded-[30px] pl-20 justify-center hover:shadow-2xl hover:-translate-y-1 transition-all ease-in-out"
         >
           <h2 class="text-[#efefef] font-bold text-[20px]">Заказов</h2>
-          <span class="text-[#efefef] font-bold text-[40px]">20</span>
+          <span class="text-[#efefef] font-bold text-[40px]">{{ ordersNumber }}</span>
           <div class="flex justify-end">
             <a
               href="#"
@@ -24,7 +80,7 @@ import RingChart_component from './RingChart.vue'
           class="money flex flex-col h-[140px] rounded-[30px] pl-20 justify-center hover:shadow-2xl hover:-translate-y-1 transition-all ease-in-out"
         >
           <h2 class="text-[#efefef] font-bold text-[20px]">Доход</h2>
-          <span class="text-[#efefef] font-bold text-[40px]">20 ₽</span>
+          <span class="text-[#efefef] font-bold text-[40px]">{{ totalRevenue }} ₽</span>
           <div class="flex justify-end">
             <a
               href="#"
@@ -37,7 +93,7 @@ import RingChart_component from './RingChart.vue'
           class="clients flex flex-col h-[140px] rounded-[30px] pl-20 justify-center hover:shadow-2xl hover:-translate-y-1 transition-all ease-in-out"
         >
           <h2 class="text-[#efefef] font-bold text-[20px]">Клиентов</h2>
-          <span class="text-[#efefef] font-bold text-[40px]">20</span>
+          <span class="text-[#efefef] font-bold text-[40px]">{{ usersNumber }}</span>
           <div class="flex justify-end">
             <a
               href="#"
@@ -60,7 +116,7 @@ import RingChart_component from './RingChart.vue'
         </div>
       </div>
       <div
-        class="bg-[#2C2C2C] h-full rounded-[30px] hover:shadow-2xl hover:-translate-y-1 transition-all ease-in-out flex flex-col p-5 gap-5"
+        class="bg-[#2C2C2C] h-[400px] rounded-[30px] hover:shadow-2xl hover:-translate-y-1 transition-all ease-in-out flex flex-col p-5 gap-5"
       >
         <div class="w-full flex justify-between">
           <h2 class="text-[#efefef] font-bold text-[20px]">Заказы</h2>
@@ -70,12 +126,15 @@ import RingChart_component from './RingChart.vue'
             >Посмотреть все</a
           >
         </div>
-        <div class="w-full flex justify-between text-[#B9B9B9] font-light text-[16px]">
-          <!-- <span>Заказ</span>
-          <span>ФИО клиента</span>
-          <span>Дата</span>
-          <span>Цена</span>
-          <span>Статус заказа</span> -->
+        <div class="w-full flex text-[#B9B9B9] font-light text-[16px]">
+          <span class="w-[100px]">Заказ</span>
+          <span class="w-[400px]">ФИО клиента</span>
+          <span class="w-[200px]">Дата</span>
+          <span class="w-[300px]">Цена</span>
+          <span class="w-[300px]">Статус заказа</span>
+        </div>
+        <div class="overflow-auto">
+          <CardListOrder :items="orders" />
         </div>
       </div>
     </div>
