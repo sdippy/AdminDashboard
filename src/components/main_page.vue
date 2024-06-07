@@ -112,7 +112,7 @@ onMounted(async () => {
         <div
           class="col-start-3 h-[300px] bg-[#2C2C2C] rounded-[30px] flex justify-center hover:shadow-2xl hover:-translate-y-1 transition-all ease-in-out"
         >
-          <RingChart_component />
+          <RingChart_component :total-revenue="totalRevenue" />
         </div>
       </div>
       <div

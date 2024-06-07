@@ -2,6 +2,13 @@
 import { ref, onMounted } from 'vue'
 import { Chart, registerables } from 'chart.js'
 
+const props = defineProps({
+  totalRevenue: {
+    type: Number,
+    required: true
+  }
+})
+
 // Регистрируем компоненты Chart.js
 Chart.register(...registerables)
 
@@ -16,7 +23,7 @@ onMounted(() => {
       datasets: [
         {
           label: 'Progress',
-          data: [300, 1000 - 300], // Текущее значение и оставшееся до цели (например, 300 текущего и 200 оставшегося)
+          data: [props.totalRevenue, 1000000 - props.totalRevenue], // Текущее значение и оставшееся до цели (например, 300 текущего и 200 оставшегося)
           backgroundColor: ['rgba(29, 115, 70, 1)', 'rgba(113, 26, 92, 1)'],
           borderColor: ['rgba(113, 26, 92, 1)', 'rgba(29, 115, 70, 1)'],
           borderWidth: 1

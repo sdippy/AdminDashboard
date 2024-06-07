@@ -11,6 +11,7 @@ const selectedOrder = ref(null) // Переменная для хранения 
 
 const updateSelectedOrder = (order) => {
   selectedOrder.value = order
+  console.log(selectedOrder.value)
 }
 
 const onClickOrder = (order) => {
