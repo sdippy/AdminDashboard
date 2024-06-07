@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { Chart, registerables } from 'chart.js'
 
 const props = defineProps({
@@ -8,6 +8,16 @@ const props = defineProps({
     required: true
   }
 })
+
+// const total = ref(0)
+// total.value = props.totalRevenue
+// console.log(props)
+// console.log(props.totalRevenue)
+// console.log(props.totalRevenue)
+
+const totalRevenue = computed(() => props.totalRevenue)
+console.log(totalRevenue.value)
+console.log(totalRevenue.value)
 
 // Регистрируем компоненты Chart.js
 Chart.register(...registerables)
@@ -23,7 +33,7 @@ onMounted(() => {
       datasets: [
         {
           label: 'Progress',
-          data: [props.totalRevenue, 1000000 - props.totalRevenue], // Текущее значение и оставшееся до цели (например, 300 текущего и 200 оставшегося)
+          data: [totalRevenue.value, 1000000 - totalRevenue.value], // Текущее значение и оставшееся до цели (например, 300 текущего и 200 оставшегося)
           backgroundColor: ['rgba(29, 115, 70, 1)', 'rgba(113, 26, 92, 1)'],
           borderColor: ['rgba(113, 26, 92, 1)', 'rgba(29, 115, 70, 1)'],
           borderWidth: 1

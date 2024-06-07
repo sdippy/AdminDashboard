@@ -8,6 +8,6 @@ import category_page from './components/category_page.vue'
 <template>
   <div class="flex">
     <menuPanel />
-    <category_page />
+    <main_page />
   </div>
 </template>

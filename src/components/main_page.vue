@@ -39,10 +39,6 @@ const fetchOrders = async () => {
   }
 }
 
-const totalRevenue = computed(() => {
-  return orders.value.reduce((acc, order) => acc + (order.totalPrice || 0), 0)
-})
-
 const fetchUsers = async () => {
   try {
     const { data } = await axios.get(`http://localhost:3000/users`)
@@ -56,6 +52,10 @@ const fetchUsers = async () => {
 onMounted(async () => {
   await fetchOrders()
   await fetchUsers()
+})
+
+const totalRevenue = computed(() => {
+  return orders.value.reduce((acc, order) => acc + (order.totalPrice || 0), 0)
 })
 </script>
 
