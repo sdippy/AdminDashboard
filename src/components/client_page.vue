@@ -3,6 +3,7 @@ import { onMounted, ref, provide } from 'vue'
 import axios from 'axios'
 
 import CardListClient_component from './CardListClient_component.vue'
+import WindowClient from './WindowClient.vue'
 
 // Массив категорий
 const users = ref([])
@@ -16,11 +17,29 @@ const updateselectedClient = (order) => {
 
 const onClickClient = (client) => {
   updateselectedClient(client)
+  openClientWindow()
+}
+
+const clientWindowOpen = ref(false)
+
+const closeClientWindow = async () => {
+  clientWindowOpen.value = false
+  document.body.style.overflow = ''
+  document.body.style.paddingRight = ''
+  load()
+}
+
+const openClientWindow = () => {
+  load()
+  clientWindowOpen.value = true
+  document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`
+  document.body.style.overflow = 'hidden'
 }
 
 provide('client', {
   onClickClient,
-  selectedClient
+  selectedClient,
+  closeClientWindow
 })
 
 const fetchItems = async () => {
@@ -45,6 +64,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <WindowClient v-if="clientWindowOpen" />
   <div class="h-svh min-h-[700px] w-full p-10">
     <div class="w-full h-full flex flex-col gap-5">
       <div class="w-full flex flex-col p-5 gap-5 h-[150px] bg-[#2C2C2C] rounded-[30px]"></div>

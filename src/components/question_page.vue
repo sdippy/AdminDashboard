@@ -3,6 +3,7 @@ import { onMounted, ref, provide } from 'vue'
 import axios from 'axios'
 
 import CardListQuestion from './CardListQuestion.vue'
+import WindowQuestion from './WindowQuestion.vue'
 
 const questions = ref([])
 const questionsNumber = ref(0)
@@ -15,11 +16,29 @@ const updateselectedQuestion = (order) => {
 
 const onClickQuestion = (question) => {
   updateselectedQuestion(question)
+  openQuestionWindow()
+}
+
+const questionWindowOpen = ref(false)
+
+const closeQuestionWindow = async () => {
+  questionWindowOpen.value = false
+  document.body.style.overflow = ''
+  document.body.style.paddingRight = ''
+  load()
+}
+
+const openQuestionWindow = () => {
+  load()
+  questionWindowOpen.value = true
+  document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`
+  document.body.style.overflow = 'hidden'
 }
 
 provide('question', {
   onClickQuestion,
-  selectedQuestion
+  selectedQuestion,
+  closeQuestionWindow
 })
 
 const fetchItems = async () => {
@@ -44,6 +63,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <WindowQuestion v-if="questionWindowOpen" />
   <div class="h-svh min-h-[700px] w-full p-10">
     <div class="w-full h-full flex flex-col gap-5">
       <div class="w-full flex flex-col p-5 gap-5 h-[150px] bg-[#2C2C2C] rounded-[30px]"></div>

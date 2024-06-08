@@ -3,6 +3,7 @@ import { onMounted, ref, provide } from 'vue'
 import axios from 'axios'
 
 import CardListSneakers from './CardListSneakers.vue'
+import WindowSneaker from './WindowSneaker.vue'
 
 // Массив категорий
 const sneakers = ref([])
@@ -16,11 +17,29 @@ const updateselectedSneaker = (order) => {
 
 const onClickSneaker = (sneaker) => {
   updateselectedSneaker(sneaker)
+  openSneakerWindow()
+}
+
+const sneakerWindowOpen = ref(false)
+
+const closeSneakerWindow = async () => {
+  sneakerWindowOpen.value = false
+  document.body.style.overflow = ''
+  document.body.style.paddingRight = ''
+  load()
+}
+
+const openSneakerWindow = () => {
+  load()
+  sneakerWindowOpen.value = true
+  document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`
+  document.body.style.overflow = 'hidden'
 }
 
 provide('sneaker', {
   onClickSneaker,
-  selectedSneaker
+  selectedSneaker,
+  closeSneakerWindow
 })
 
 const fetchItems = async () => {
@@ -45,6 +64,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <WindowSneaker v-if="sneakerWindowOpen" />
   <div class="h-svh min-h-[700px] w-full p-10">
     <div class="w-full h-full flex flex-col gap-5">
       <div class="w-full flex flex-col p-5 gap-5 h-[150px] bg-[#2C2C2C] rounded-[30px]"></div>

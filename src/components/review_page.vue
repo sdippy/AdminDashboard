@@ -3,6 +3,7 @@ import { onMounted, ref, provide } from 'vue'
 import axios from 'axios'
 
 import CardListReview from './CardListReview.vue'
+import WindowReview from './WindowReview.vue'
 
 const reviews = ref([])
 const reviewsNumber = ref(0)
@@ -15,11 +16,29 @@ const updateselectedReview = (order) => {
 
 const onClickReview = (review) => {
   updateselectedReview(review)
+  openReviewWindow()
+}
+
+const reviewWindowOpen = ref(false)
+
+const closeReviewWindow = async () => {
+  reviewWindowOpen.value = false
+  document.body.style.overflow = ''
+  document.body.style.paddingRight = ''
+  load()
+}
+
+const openReviewWindow = () => {
+  load()
+  reviewWindowOpen.value = true
+  document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`
+  document.body.style.overflow = 'hidden'
 }
 
 provide('review', {
   onClickReview,
-  selectedReview
+  selectedReview,
+  closeReviewWindow
 })
 
 const fetchItems = async () => {
@@ -44,6 +63,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <WindowReview v-if="reviewWindowOpen" />
   <div class="h-svh min-h-[700px] w-full p-10">
     <div class="w-full h-full flex flex-col gap-5">
       <div class="w-full flex flex-col p-5 gap-5 h-[150px] bg-[#2C2C2C] rounded-[30px]"></div>
