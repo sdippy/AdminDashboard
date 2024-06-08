@@ -1,4 +1,8 @@
 <script setup>
+import { inject } from 'vue'
+
+const { onClickReview } = inject('review')
+
 const props = defineProps({
   id: Number,
   product: String,
@@ -8,12 +12,11 @@ const props = defineProps({
   date: String,
   isActive: Boolean
 })
-
-// console.log(props)
 </script>
 
 <template>
   <div
+    @click="onClickReview({ id, product, rating, message, userId, date, isActive })"
     class="review w-full items-center flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"
   >
     <span class="w-[100px] break-all"># {{ id }}</span>

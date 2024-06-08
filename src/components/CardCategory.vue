@@ -1,15 +1,18 @@
 <script setup>
+import { inject } from 'vue'
+
+const { onClickCategory } = inject('category')
+
 const props = defineProps({
   id: Number,
   title: String,
   imageUrl: String
 })
-
-// console.log(props)
 </script>
 
 <template>
   <div
+    @click="onClickCategory({ id, title, imageUrl })"
     class="category w-full items-center flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"
   >
     <span class="w-[100px] break-all"># {{ id }}</span>

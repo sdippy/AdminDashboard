@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, provide } from 'vue'
 import axios from 'axios'
 
 import CardListCategory from './CardListCategory.vue'
@@ -7,6 +7,23 @@ import CardListCategory from './CardListCategory.vue'
 // Массив категорий
 const categories = ref([])
 const categoriesNumber = ref(0)
+const selectedCategory = ref(null) // Переменная для хранения информации о выбранном бренде
+
+const updateselectedCategory = (order) => {
+  selectedCategory.value = order
+  console.log(selectedCategory.value)
+}
+
+const onClickCategory = (category) => {
+  updateselectedCategory(category)
+  // openOrderWindow()
+}
+
+provide('category', {
+  onClickCategory,
+  selectedCategory
+  // closeOrderWindow
+})
 
 const fetchItems = async () => {
   try {

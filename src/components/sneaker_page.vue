@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, provide } from 'vue'
 import axios from 'axios'
 
 import CardListSneakers from './CardListSneakers.vue'
@@ -7,6 +7,21 @@ import CardListSneakers from './CardListSneakers.vue'
 // Массив категорий
 const sneakers = ref([])
 const sneakersNumber = ref(0)
+const selectedSneaker = ref(null) // Переменная для хранения информации о выбранном товаре
+
+const updateselectedSneaker = (order) => {
+  selectedSneaker.value = order
+  console.log(selectedSneaker.value)
+}
+
+const onClickSneaker = (sneaker) => {
+  updateselectedSneaker(sneaker)
+}
+
+provide('sneaker', {
+  onClickSneaker,
+  selectedSneaker
+})
 
 const fetchItems = async () => {
   try {

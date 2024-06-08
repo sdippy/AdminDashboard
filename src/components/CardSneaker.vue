@@ -1,4 +1,8 @@
 <script setup>
+import { inject } from 'vue'
+
+const { onClickSneaker } = inject('sneaker')
+
 const props = defineProps({
   id: Number,
   title: String,
@@ -12,12 +16,25 @@ const props = defineProps({
   imageUrl2: String,
   imageUrl3: String
 })
-
-// console.log(props)
 </script>
 
 <template>
   <div
+    @click="
+      onClickSneaker({
+        id,
+        title,
+        category,
+        price,
+        newprice,
+        discount,
+        discountCategory,
+        description,
+        imageUrl,
+        imageUrl2,
+        imageUrl3
+      })
+    "
     class="sneaker w-full items-center flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"
   >
     <span class="w-[100px] break-all"># {{ id }}</span>

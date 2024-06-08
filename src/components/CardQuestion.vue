@@ -1,4 +1,8 @@
 <script setup>
+import { inject } from 'vue'
+
+const { onClickQuestion } = inject('question')
+
 const props = defineProps({
   id: Number,
   name: String,
@@ -7,12 +11,11 @@ const props = defineProps({
   date: String,
   isChecked: Boolean
 })
-
-// console.log(props)
 </script>
 
 <template>
   <div
+    @click="onClickQuestion({ id, name, email, message, date, isChecked })"
     class="question w-full items-center flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"
   >
     <span class="w-[100px] break-all"># {{ id }}</span>

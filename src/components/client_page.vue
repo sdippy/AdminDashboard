@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, provide } from 'vue'
 import axios from 'axios'
 
 import CardListClient_component from './CardListClient_component.vue'
@@ -7,6 +7,21 @@ import CardListClient_component from './CardListClient_component.vue'
 // Массив категорий
 const users = ref([])
 const usersNumber = ref(0)
+const selectedClient = ref(null) // Переменная для хранения информации о выбранном клиенте
+
+const updateselectedClient = (order) => {
+  selectedClient.value = order
+  console.log(selectedClient.value)
+}
+
+const onClickClient = (client) => {
+  updateselectedClient(client)
+}
+
+provide('client', {
+  onClickClient,
+  selectedClient
+})
 
 const fetchItems = async () => {
   try {

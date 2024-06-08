@@ -1,11 +1,26 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, provide } from 'vue'
 import axios from 'axios'
 
 import CardListQuestion from './CardListQuestion.vue'
 
 const questions = ref([])
 const questionsNumber = ref(0)
+const selectedQuestion = ref(null) // Переменная для хранения информации о выбранном вопросе
+
+const updateselectedQuestion = (order) => {
+  selectedQuestion.value = order
+  console.log(selectedQuestion.value)
+}
+
+const onClickQuestion = (question) => {
+  updateselectedQuestion(question)
+}
+
+provide('question', {
+  onClickQuestion,
+  selectedQuestion
+})
 
 const fetchItems = async () => {
   try {

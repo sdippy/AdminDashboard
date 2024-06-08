@@ -1,11 +1,26 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, provide } from 'vue'
 import axios from 'axios'
 
 import CardListReview from './CardListReview.vue'
 
 const reviews = ref([])
 const reviewsNumber = ref(0)
+const selectedReview = ref(null) // Переменная для хранения информации о выбранном отзыве
+
+const updateselectedReview = (order) => {
+  selectedReview.value = order
+  console.log(selectedReview.value)
+}
+
+const onClickReview = (review) => {
+  updateselectedReview(review)
+}
+
+provide('review', {
+  onClickReview,
+  selectedReview
+})
 
 const fetchItems = async () => {
   try {
