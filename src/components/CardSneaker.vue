@@ -2,7 +2,15 @@
 const props = defineProps({
   id: Number,
   title: String,
-  imageUrl: String
+  category: String,
+  price: Number,
+  newprice: Number,
+  discount: Number,
+  discountCategory: String,
+  description: String,
+  imageUrl: String,
+  imageUrl2: String,
+  imageUrl3: String
 })
 
 // console.log(props)
@@ -10,12 +18,16 @@ const props = defineProps({
 
 <template>
   <div
-    class="category w-full items-center flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"
+    class="sneaker w-full items-center flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"
   >
     <span class="w-[100px] break-all">{{ id }}</span>
     <span class="w-[400px] break-all">{{ title }}</span>
+    <span class="w-[300px] break-all">{{ category }}</span>
+    <span class="w-[150px] break-all">{{ price }} ₽</span>
+    <span v-if="newprice" class="w-[150px] break-all">{{ newprice }} ₽</span>
+    <span v-else class="w-[150px] break-all">{{ newprice }} </span>
     <span class="w-[150px] break-all">
-      <img :src="imageUrl" alt="category_image" class="w-[50px]" />
+      <img :src="imageUrl" alt="sneaker_image" class="w-[50px]" />
     </span>
     <span class="btn items-center">
       <svg
@@ -44,7 +56,7 @@ const props = defineProps({
   transition: all ease-in-out;
 }
 
-.category:hover .btn {
+.sneaker:hover .btn {
   display: flex;
 }
 </style>

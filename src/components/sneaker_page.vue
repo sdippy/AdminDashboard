@@ -2,19 +2,19 @@
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
 
-import CardListCategory from './CardListCategory.vue'
+import CardListSneakers from './CardListSneakers.vue'
 
 // Массив категорий
-const categories = ref([])
-const categoriesNumber = ref(0)
+const sneakers = ref([])
+const sneakersNumber = ref(0)
 
 const fetchItems = async () => {
   try {
-    const { data } = await axios.get('http://localhost:3000/categories')
-    categories.value = data.map((obj) => ({
+    const { data } = await axios.get('http://localhost:3000/sneakers')
+    sneakers.value = data.map((obj) => ({
       ...obj
     }))
-    categoriesNumber.value = data.length
+    sneakersNumber.value = data.length
   } catch (err) {
     console.log(err)
   }
@@ -38,18 +38,21 @@ onMounted(async () => {
         class="bg-[#2C2C2C] h-[calc(100%-170px)] rounded-[30px] hover:shadow-2xl transition-all ease-in-out flex flex-col p-5 gap-5"
       >
         <div class="w-full flex justify-between">
-          <h2 class="text-[#efefef] font-bold text-[20px]">Бренды</h2>
+          <h2 class="text-[#efefef] font-bold text-[20px]">Товары</h2>
         </div>
         <div class="w-full flex text-[#B9B9B9] font-light text-[16px]">
-          <span class="w-[100px]">Бренд</span>
+          <span class="w-[100px]">Товар</span>
           <span class="w-[400px]">Наименование</span>
+          <span class="w-[300px]">Категория</span>
+          <span class="w-[150px]">Цена</span>
+          <span class="w-[150px]">Цена со скидкой</span>
           <span class="w-[150px]">Картинка</span>
         </div>
         <div class="overflow-auto h-full">
-          <CardListCategory :items="categories" />
+          <CardListSneakers :items="sneakers" />
         </div>
         <div class="h-[30px] w-full flex gap-5 text-[#B9B9B9] font-light text-[16px]">
-          <div>Всего брендов: {{ categoriesNumber }}</div>
+          <div>Всего товаров: {{ sneakersNumber }}</div>
         </div>
       </div>
     </div>

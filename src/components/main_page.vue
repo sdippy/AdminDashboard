@@ -31,7 +31,9 @@ provide('order', {
 
 const fetchOrders = async () => {
   try {
-    const { data } = await axios.get(`http://localhost:3000/orders`)
+    const { data } = await axios.get(
+      `http://localhost:3000/orders?DeliveryProcess=Ожидает подтверждения`
+    )
 
     orders.value = data.map((order) => ({
       ...order
@@ -85,10 +87,10 @@ const totalRevenue = computed(() => {
           <h2 class="text-[#efefef] font-bold text-[20px]">Доход</h2>
           <span class="text-[#efefef] font-bold text-[40px]">{{ totalRevenue }} ₽</span>
           <div class="flex justify-end">
-            <a
-              href="#"
+            <router-link
+              to="/order"
               class="text-[#efefef] font-bold text-[15px] text-right mr-[20px] border-b border-transparent hover:border-b hover:border-[#efefef] transition-all ease-in-out"
-              >Детали ➔</a
+              >Детали ➔</router-link
             >
           </div>
         </div>

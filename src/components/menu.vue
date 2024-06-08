@@ -56,7 +56,7 @@
               fill="#EFEFEF"
             />
           </svg>
-          <a href="#" class="link hover:text-[#B9B9B9]">Товары</a>
+          <router-link to="/sneaker" href="#" class="link hover:text-[#B9B9B9]">Товары</router-link>
         </div>
         <div class="flex items-center gap-[10px] link_group1">
           <svg
@@ -86,9 +86,7 @@
             />
           </svg>
 
-          <router-link to="/category" class="link hover:text-[#B9B9B9]"
-            >Категории товаров</router-link
-          >
+          <router-link to="/category" class="link hover:text-[#B9B9B9]">Бренды товаров</router-link>
         </div>
         <div class="flex items-center gap-[10px] link_group">
           <svg
@@ -104,7 +102,7 @@
             />
           </svg>
 
-          <a href="#" class="link hover:text-[#B9B9B9]">Отзывы</a>
+          <router-link to="/Review" href="#" class="link hover:text-[#B9B9B9]">Отзывы</router-link>
         </div>
         <div class="flex items-center gap-[10px] link_group">
           <svg

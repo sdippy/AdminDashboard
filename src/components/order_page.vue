@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, provide } from 'vue'
+import { ref, onMounted, provide, computed } from 'vue'
 
 import axios from 'axios'
 
@@ -63,6 +63,10 @@ const load = async () => {
 onMounted(async () => {
   await fetchOrders()
 })
+
+const totalRevenue = computed(() => {
+  return orders.value.reduce((acc, order) => acc + (order.totalPrice || 0), 0)
+})
 </script>
 
 <template>
@@ -72,7 +76,7 @@ onMounted(async () => {
       <div class="w-full flex flex-col p-5 gap-5 h-[150px] bg-[#2C2C2C] rounded-[30px]"></div>
 
       <div
-        class="bg-[#2C2C2C] h-full rounded-[30px] hover:shadow-2xl transition-all ease-in-out flex flex-col p-5 gap-5"
+        class="bg-[#2C2C2C] h-[calc(100%-170px)] rounded-[30px] hover:shadow-2xl transition-all ease-in-out flex flex-col p-5 gap-5"
       >
         <div class="w-full flex justify-between">
           <h2 class="text-[#efefef] font-bold text-[20px]">Заказы</h2>
@@ -89,31 +93,9 @@ onMounted(async () => {
         </div>
         <div class="h-[30px] w-full flex gap-5 text-[#B9B9B9] font-light text-[16px]">
           <div>Всего заказов: {{ ordersNumber }}</div>
+          <div>На сумму: {{ totalRevenue }} ₽</div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-.order {
-  background-image: url('/bg.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.money {
-  background-image: url('/bg (1).jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.clients {
-  background-image: url('/bg (2).jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-</style>

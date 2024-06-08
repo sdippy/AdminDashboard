@@ -1,8 +1,12 @@
 <script setup>
 const props = defineProps({
   id: Number,
-  title: String,
-  imageUrl: String
+  product: String,
+  rating: Number,
+  message: String,
+  userId: String,
+  date: String,
+  isActive: Boolean
 })
 
 // console.log(props)
@@ -10,13 +14,14 @@ const props = defineProps({
 
 <template>
   <div
-    class="category w-full items-center flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"
+    class="review w-full items-center flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"
   >
     <span class="w-[100px] break-all">{{ id }}</span>
-    <span class="w-[400px] break-all">{{ title }}</span>
-    <span class="w-[150px] break-all">
-      <img :src="imageUrl" alt="category_image" class="w-[50px]" />
-    </span>
+    <span class="w-[200px] break-all">{{ isActive }}</span>
+    <span class="w-[100px] break-all">{{ rating }}</span>
+    <span class="w-[500px] break-all">{{ product }}</span>
+    <span class="w-[400px] break-all">{{ date }}</span>
+
     <span class="btn items-center">
       <svg
         width="20"
@@ -44,7 +49,7 @@ const props = defineProps({
   transition: all ease-in-out;
 }
 
-.category:hover .btn {
+.review:hover .btn {
   display: flex;
 }
 </style>

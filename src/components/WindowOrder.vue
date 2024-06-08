@@ -81,6 +81,7 @@ const { selectedOrder, closeOrderWindow } = inject('order')
                   v-model="selectedOrder.delivery"
                   class="bg-[#383838] h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
                 >
+                  <option value="Отменен">Отменен</option>
                   <option value="Ожидает подтверждения">Ожидает подтверждения</option>
                   <option value="Заказ отправлен">Заказ отправлен</option>
                   <option value="Заказ получен">Заказ получен</option>

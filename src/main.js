@@ -9,13 +9,17 @@ import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 import main_page from './components/main_page.vue'
 import order_page from './components/order_page.vue'
 import category_page from './components/category_page.vue'
+import sneaker_page from './components/sneaker_page.vue'
+import review_page from './components/review_page.vue'
 
 const app = createApp(App)
 
 const routes = [
   { path: '/', name: 'Home', component: main_page },
   { path: '/Order', name: 'Order', component: order_page },
-  { path: '/Category', name: 'Category', component: category_page }
+  { path: '/Category', name: 'Category', component: category_page },
+  { path: '/Sneaker', name: 'Sneaker', component: sneaker_page },
+  { path: '/Review', name: 'Review', component: review_page }
 ]
 
 const router = createRouter({
