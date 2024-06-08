@@ -136,7 +136,7 @@ const saveChanges = async () => {
               </div>
             </div>
             <div class="w-full h-[240px] overflow-auto bg-[#2C2C2C] mt-5 flex flex-col gap-5">
-              <div class="w-full flex text-[#B9B9B9] font-light text-[16px]">
+              <div class="w-full flex text-[#B9B9B9] font-light text-[16px] p-2">
                 <span class="w-[50px]">#</span>
                 <span class="w-[300px]">Наименование</span>
                 <span class="ml-2 w-[150px]">Цена</span>

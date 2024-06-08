@@ -7,7 +7,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex flex-col gap-2" v-auto-animate>
+  <div class="flex flex-col gap-2 p-2" v-auto-animate>
     <CardWindowOrder
       v-for="sneaker in items"
       :key="sneaker.id"
