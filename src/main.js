@@ -11,6 +11,8 @@ import order_page from './components/order_page.vue'
 import category_page from './components/category_page.vue'
 import sneaker_page from './components/sneaker_page.vue'
 import review_page from './components/review_page.vue'
+import client_page from './components/client_page.vue'
+import question_page from './components/question_page.vue'
 
 const app = createApp(App)
 
@@ -19,7 +21,9 @@ const routes = [
   { path: '/Order', name: 'Order', component: order_page },
   { path: '/Category', name: 'Category', component: category_page },
   { path: '/Sneaker', name: 'Sneaker', component: sneaker_page },
-  { path: '/Review', name: 'Review', component: review_page }
+  { path: '/Review', name: 'Review', component: review_page },
+  { path: '/Client', name: 'Client', component: client_page },
+  { path: '/Question', name: 'Question', component: question_page }
 ]
 
 const router = createRouter({
