@@ -88,7 +88,7 @@
 
           <router-link to="/category" class="link hover:text-[#B9B9B9]">Бренды товаров</router-link>
         </div>
-        <div class="flex items-center gap-[10px] link_group1">
+        <div class="flex items-center gap-[10px] link_group">
           <svg
             width="20"
             height="20"
@@ -216,6 +216,22 @@
 }
 
 .link_group2:hover path {
+  stroke: #efefef;
+}
+
+.router-link-active {
+  color: #b9b9b9;
+}
+
+.router-link-active .link_group path {
+  fill: #b9b9b9;
+}
+
+.router-link-active .link_group1 path {
+  stroke: #b9b9b9;
+}
+
+.router-link-active .link_group2 path {
   stroke: #efefef;
 }
 </style>

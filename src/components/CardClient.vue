@@ -13,7 +13,7 @@ const props = defineProps({
   <div
     class="client w-full items-center flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"
   >
-    <span class="w-[100px] break-all">{{ id }}</span>
+    <span class="w-[100px] break-all"># {{ id }}</span>
     <span class="w-[400px] break-all">{{ fullName }}</span>
     <span class="w-[700px] break-all">{{ email }}</span>
 

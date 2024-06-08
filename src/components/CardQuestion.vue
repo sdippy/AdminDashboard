@@ -15,7 +15,7 @@ const props = defineProps({
   <div
     class="question w-full items-center flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"
   >
-    <span class="w-[100px] break-all">{{ id }}</span>
+    <span class="w-[100px] break-all"># {{ id }}</span>
     <span class="w-[300px] break-all">{{ name }}</span>
     <span class="w-[600px] break-all">{{ email }}</span>
     <span class="w-[150px] break-all">{{ isChecked }}</span>

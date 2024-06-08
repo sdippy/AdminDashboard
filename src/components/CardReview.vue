@@ -16,7 +16,7 @@ const props = defineProps({
   <div
     class="review w-full items-center flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"
   >
-    <span class="w-[100px] break-all">{{ id }}</span>
+    <span class="w-[100px] break-all"># {{ id }}</span>
     <span class="w-[200px] break-all">{{ isActive }}</span>
     <span class="w-[100px] break-all">{{ rating }}</span>
     <span class="w-[500px] break-all">{{ product }}</span>

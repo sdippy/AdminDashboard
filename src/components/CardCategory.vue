@@ -12,7 +12,7 @@ const props = defineProps({
   <div
     class="category w-full items-center flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"
   >
-    <span class="w-[100px] break-all">{{ id }}</span>
+    <span class="w-[100px] break-all"># {{ id }}</span>
     <span class="w-[400px] break-all">{{ title }}</span>
     <span class="w-[150px] break-all">
       <img :src="imageUrl" alt="category_image" class="w-[50px]" />

@@ -37,6 +37,17 @@ onMounted(async () => {
 const flattenedSneakers = computed(() => {
   return orders.value.flatMap((order) => order.sneakers)
 })
+
+const saveChanges = async () => {
+  try {
+    await axios.patch(`http://localhost:3000/orders/${selectedOrder.value.id}`, {
+      DeliveryProcess: selectedOrder.value.delivery
+    })
+    closeOrderWindow()
+  } catch (err) {
+    console.log(err)
+  }
+}
 </script>
 
 <template>
@@ -138,6 +149,7 @@ const flattenedSneakers = computed(() => {
           </div>
           <div class="w-full h-[40px] grid grid-cols-2 grid-rows-1 gap-5 mt-5">
             <button
+              @click="saveChanges"
               class="bg-[#145F37] text-[#efefef] font-light text-[16px] border border-transparent rounded-[10px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#145F37] active:border-[#145F37] transition-all ease-in-out"
             >
               Сохранить
