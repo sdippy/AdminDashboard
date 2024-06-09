@@ -1,14 +1,59 @@
 <script setup>
-import { ref, onMounted, provide, computed } from 'vue'
+import { ref, onMounted, provide, computed, watch, reactive } from 'vue'
 
 import axios from 'axios'
+import debounce from 'lodash.debounce'
 
 import CardListOrder from './CardListOrder.vue'
 import WindowOrder from './WindowOrder.vue'
 
 const orders = ref([])
 const ordersNumber = ref(0)
-const selectedOrder = ref(null) // Переменная для хранения информации о выбранном заказе
+const selectedOrder = ref(null)
+const searchInput = ref(null)
+const sortSelect = ref(null)
+const deliverySelect = ref(null)
+
+const defaultSort = 'id'
+const defaultOrder = 'asc'
+const priceSort = 'totalPrice'
+
+const filters = reactive({
+  sort: defaultSort,
+  order: defaultOrder,
+  searchQuerry: '',
+  DeliveryProcess: ''
+})
+
+const clearCategory = async () => {
+  searchInput.value.value = ''
+  filters.searchQuerry = ''
+  filters.sort = defaultSort
+  filters.order = defaultOrder
+  filters.DeliveryProcess = ''
+  sortSelect.value.value = `${defaultSort}`
+  deliverySelect.value.value = ``
+}
+
+const onChangeSelect = (event) => {
+  const value = event.target.value
+  if (value.includes('&')) {
+    const [sort, order] = value.split('&')
+    filters.sort = sort
+    filters.order = order.replace('_order=', '')
+  } else {
+    filters.sort = value
+    filters.order = 'asc'
+  }
+}
+
+const onChangeDeliveryProcess = (event) => {
+  filters.DeliveryProcess = event.target.value
+}
+
+const onChangeSearchInput = debounce((event) => {
+  filters.searchQuerry = event.target.value
+}, 200)
 
 const updateSelectedOrder = (order) => {
   selectedOrder.value = order
@@ -43,7 +88,20 @@ provide('order', {
 
 const fetchOrders = async () => {
   try {
-    const { data } = await axios.get(`http://localhost:3000/orders`)
+    const params = {
+      _sort: filters.sort,
+      _order: filters.order
+    }
+
+    if (filters.searchQuerry) {
+      params.q = filters.searchQuerry
+    }
+
+    if (filters.DeliveryProcess) {
+      params.DeliveryProcess = filters.DeliveryProcess
+    }
+
+    const { data } = await axios.get(`http://localhost:3000/orders`, { params })
 
     orders.value = data.map((order) => ({
       ...order
@@ -65,16 +123,59 @@ onMounted(async () => {
 const totalRevenue = computed(() => {
   return orders.value.reduce((acc, order) => acc + (order.totalPrice || 0), 0)
 })
+
+watch(filters, fetchOrders)
 </script>
 
 <template>
   <WindowOrder v-if="orderWindowOpen" />
   <div class="h-svh min-h-[700px] w-full p-10">
     <div class="w-full h-full flex flex-col gap-5">
-      <div class="w-full flex flex-col p-5 gap-5 h-[150px] bg-[#2C2C2C] rounded-[30px]"></div>
+      <div class="w-full flex gap-5 h-[60px] bg-[#383838]">
+        <div class="relative mb-5 h-[40px] w-[400px] flex items-center">
+          <img class="find_icon absolute pl-5" src="/Images/search.svg" alt="Search" />
+          <input
+            ref="searchInput"
+            @input="onChangeSearchInput"
+            class="find_box h-full w-full text-center text-[#efefef] font-light text-[16px] bg-[#2C2C2C] border border-[#383838] rounded-[5px]"
+            placeholder="Поиск"
+            type="text"
+          />
+        </div>
+        <div class="h-[40px] w-[400px]">
+          <select
+            ref="sortSelect"
+            @change="onChangeSelect"
+            class="select_filter h-full w-full text-center text-[#efefef] font-light text-[16px] bg-[#2C2C2C] border border-[#383838] rounded-[5px]"
+          >
+            <option value="id">По id (По возрастанию)</option>
+            <option :value="priceSort">По цене (дешевые)</option>
+            <option :value="`${priceSort}&_order=desc`">По цене (дорогие)</option>
+          </select>
+        </div>
+        <div class="h-[40px] w-[400px]">
+          <select
+            ref="deliverySelect"
+            @change="onChangeDeliveryProcess"
+            class="select_filter h-full w-full text-center text-[#efefef] font-light text-[16px] bg-[#2C2C2C] border border-[#383838] rounded-[5px]"
+          >
+            <option value="">Все статусы</option>
+            <option value="Отменен">Отменен</option>
+            <option value="Ожидает подтверждения">Ожидает подтверждения</option>
+            <option value="Заказ отправлен">Заказ отправлен</option>
+            <option value="Заказ получен">Заказ получен</option>
+          </select>
+        </div>
+        <button
+          @click="clearCategory"
+          class="h-[40px] w-[250px] bg-[#2C2C2C] active:bg-[#efefef] active:text-[#2C2C2C] hover:bg-[#efefef] hover:text-[#2C2C2C] transition-all ease-in-out text-[#efefef] font-light text-[16px] rounded-[5px]"
+        >
+          Очистить фильтры
+        </button>
+      </div>
 
       <div
-        class="bg-[#2C2C2C] h-[calc(100%-170px)] rounded-[30px] hover:shadow-2xl transition-all ease-in-out flex flex-col p-5 gap-5"
+        class="bg-[#2C2C2C] h-[calc(100%-80px)] rounded-[30px] hover:shadow-2xl transition-all ease-in-out flex flex-col p-5 gap-5"
       >
         <div class="w-full flex justify-between">
           <h2 class="text-[#efefef] font-bold text-[20px]">Заказы</h2>
