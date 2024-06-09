@@ -1,6 +1,7 @@
 <script setup>
-import { onMounted, ref, provide } from 'vue'
+import { onMounted, ref, provide, reactive, watch } from 'vue'
 import axios from 'axios'
+import debounce from 'lodash.debounce'
 
 import CardListReview from './CardListReview.vue'
 import WindowReview from './WindowReview.vue'
@@ -8,6 +9,43 @@ import WindowReview from './WindowReview.vue'
 const reviews = ref([])
 const reviewsNumber = ref(0)
 const selectedReview = ref(null) // Переменная для хранения информации о выбранном отзыве
+
+const searchInput = ref(null)
+const titleSort = ref(null)
+
+const defaultSort = 'id'
+const defaultOrder = 'asc'
+const title = 'product'
+
+const filters = reactive({
+  sort: defaultSort,
+  order: defaultOrder,
+  searchQuerry: ''
+})
+
+const onChangeSelect = (event) => {
+  const value = event.target.value
+  if (value.includes('&')) {
+    const [sort, order] = value.split('&')
+    filters.sort = sort
+    filters.order = order.replace('_order=', '')
+  } else {
+    filters.sort = value
+    filters.order = 'asc'
+  }
+}
+
+const clearCategory = async () => {
+  searchInput.value.value = ''
+  filters.searchQuerry = ''
+  filters.sort = defaultSort
+  filters.order = defaultOrder
+  titleSort.value.value = `${defaultSort}`
+}
+
+const onChangeSearchInput = debounce((event) => {
+  filters.searchQuerry = event.target.value
+}, 200)
 
 const updateselectedReview = (order) => {
   selectedReview.value = order
@@ -43,7 +81,15 @@ provide('review', {
 
 const fetchItems = async () => {
   try {
-    const { data } = await axios.get('http://localhost:3000/reviews')
+    const params = {
+      _sort: filters.sort,
+      _order: filters.order
+    }
+    if (filters.searchQuerry) {
+      params.q = filters.searchQuerry
+    }
+
+    const { data } = await axios.get('http://localhost:3000/reviews', { params })
     reviews.value = data.map((obj) => ({
       ...obj
     }))
@@ -60,13 +106,43 @@ const load = async () => {
 onMounted(async () => {
   await fetchItems()
 })
+
+watch(filters, fetchItems)
 </script>
 
 <template>
   <WindowReview v-if="reviewWindowOpen" />
   <div class="h-svh min-h-[700px] w-full p-10">
     <div class="w-full h-full flex flex-col gap-5">
-      <div class="w-full flex flex-col p-5 gap-5 h-[150px] bg-[#2C2C2C] rounded-[30px]"></div>
+      <div class="w-full flex gap-5 h-[150px] bg-[#383838]">
+        <div class="relative mb-5 h-[40px] w-[400px] flex items-center">
+          <img class="find_icon absolute pl-5" src="/Images/search.svg" alt="Search" />
+          <input
+            ref="searchInput"
+            @input="onChangeSearchInput"
+            class="find_box h-full w-full text-center text-[#efefef] font-light text-[16px] bg-[#2C2C2C] border border-[#383838] rounded-[5px]"
+            placeholder="Поиск"
+            type="text"
+          />
+        </div>
+        <div class="h-[40px] w-[400px]">
+          <select
+            ref="titleSort"
+            @change="onChangeSelect"
+            class="select_filter h-full w-full text-center text-[#efefef] font-light text-[16px] bg-[#2C2C2C] border border-[#383838] rounded-[5px]"
+          >
+            <option value="id">По id (По возрастанию)</option>
+            <option :value="title">По наименованию (По возрастанию)</option>
+            <option :value="`${title}&_order=desc`">По наименованию (По убыванию)</option>
+          </select>
+        </div>
+        <button
+          @click="clearCategory"
+          class="h-[40px] w-[250px] bg-[#2C2C2C] active:bg-[#efefef] active:text-[#2C2C2C] hover:bg-[#efefef] hover:text-[#2C2C2C] transition-all ease-in-out text-[#efefef] font-light text-[16px] rounded-[5px]"
+        >
+          Очистить фильтры
+        </button>
+      </div>
 
       <div
         class="bg-[#2C2C2C] h-[calc(100%-170px)] rounded-[30px] hover:shadow-2xl transition-all ease-in-out flex flex-col p-5 gap-5"
