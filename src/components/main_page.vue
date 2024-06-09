@@ -25,7 +25,7 @@ const updateSelectedOrder = (order) => {
 
 const onClickOrder = (order) => {
   updateSelectedOrder(order)
-  // console.log(selectedOrder.value)
+  console.log(selectedOrder.value)
   openOrderWindow()
 }
 

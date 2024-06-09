@@ -56,7 +56,7 @@ const saveChanges = async () => {
     class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-30"
   ></div>
   <div
-    class="orderWindow fixed h-full w-full 2xl:h-5/6 2xl:max-h-[1000px] 2xl:w-6/12 2xl:max-w-[1200px] inset-2/4 -translate-x-2/4 -translate-y-2/4 z-20"
+    class="orderWindow fixed h-full w-full 2xl:h-5/6 2xl:max-h-[1200px] 2xl:w-6/12 2xl:max-w-[1200px] inset-2/4 -translate-x-2/4 -translate-y-2/4 z-20"
   >
     <div class="w-full h-full">
       <!-- very-small -->

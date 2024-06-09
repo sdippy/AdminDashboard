@@ -11,7 +11,7 @@ const selectedReview = ref(null) // Переменная для хранения
 
 const updateselectedReview = (order) => {
   selectedReview.value = order
-  console.log(selectedReview.value)
+  // console.log(selectedReview.value)
 }
 
 const onClickReview = (review) => {

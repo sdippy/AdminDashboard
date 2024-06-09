@@ -12,7 +12,6 @@ const selectedClient = ref(null) // Переменная для хранения
 
 const updateselectedClient = (order) => {
   selectedClient.value = order
-  console.log(selectedClient.value)
 }
 
 const onClickClient = (client) => {

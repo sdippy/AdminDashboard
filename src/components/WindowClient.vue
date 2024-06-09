@@ -1,7 +1,48 @@
 <script setup>
-import { inject } from 'vue'
+import { inject, ref, onMounted } from 'vue'
+
+import axios from 'axios'
 
 const { selectedClient, closeClientWindow } = inject('client')
+
+const userId = localStorage.getItem('userId')
+
+const register = ref([])
+const registrationDate = ref('')
+
+const fetchUser = async () => {
+  try {
+    const { data } = await axios.get(
+      `http://localhost:3000/register?usersID=${selectedClient.value.id}`
+    )
+    register.value = data.map((obj) => ({
+      ...obj
+    }))
+    if (register.value.length > 0) {
+      registrationDate.value = register.value[0].registrationDate
+    }
+  } catch (err) {
+    console.log(err)
+  }
+  console.log(register.value)
+}
+
+onMounted(async () => {
+  await fetchUser()
+})
+
+const saveChanges = async () => {
+  try {
+    await axios.patch(`http://localhost:3000/users/${selectedClient.value.id}`, {
+      fullName: selectedClient.value.fullName,
+      newsletter: selectedClient.value.newsletter,
+      email: selectedClient.value.email
+    })
+    closeClientWindow()
+  } catch (err) {
+    console.log(err)
+  }
+}
 </script>
 
 <template>
@@ -10,7 +51,7 @@ const { selectedClient, closeClientWindow } = inject('client')
     class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-30"
   ></div>
   <div
-    class="orderWindow fixed h-full w-full 2xl:h-5/6 2xl:max-h-[1000px] 2xl:w-6/12 2xl:max-w-[1200px] inset-2/4 -translate-x-2/4 -translate-y-2/4 z-20"
+    class="orderWindow fixed h-full w-full 2xl:h-4/6 2xl:max-h-[700px] 2xl:w-6/12 2xl:max-w-[1200px] inset-2/4 -translate-x-2/4 -translate-y-2/4 z-20"
   >
     <div class="w-full h-full">
       <!-- very-small -->
@@ -35,9 +76,73 @@ const { selectedClient, closeClientWindow } = inject('client')
           </svg>
         </div>
         <div class="h-full w-full flex flex-col">
-          <div class="w-full h-full flex-1 flex-col overflow-auto">Client</div>
+          <div class="w-full h-full flex-1 flex-col overflow-auto">
+            <div class="flex flex-col gap-5">
+              <div class="flex justify-between">
+                <p class="h-[40px] text-[#efefef] font-light text-[16px] w-[30%]">Пользователь #</p>
+                <input
+                  v-model="selectedClient.id"
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] w-[70%] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                />
+              </div>
+              <div class="flex justify-between">
+                <p class="h-[40px] w-[30%] text-[#efefef] font-light text-[16px]">
+                  ФИО пользователя:
+                </p>
+
+                <textarea
+                  :disabled="!userId"
+                  v-model="selectedClient.fullName"
+                  name=""
+                  id=""
+                  cols="30"
+                  rows="1"
+                  class="bg-transparent break-all w-[70%] overflow-auto text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
+                ></textarea>
+              </div>
+              <div class="flex justify-between">
+                <p class="h-[40px] text-[#efefef] w-[30%] font-light text-[16px]">Почта:</p>
+                <textarea
+                  :disabled="!userId"
+                  v-model="selectedClient.email"
+                  name=""
+                  id=""
+                  cols="30"
+                  rows="1"
+                  class="bg-transparent break-all w-[70%] overflow-auto text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
+                ></textarea>
+              </div>
+              <div class="flex justify-between">
+                <p class="h-[40px] text-[#efefef] w-[30%] font-light text-[16px]">
+                  Полная дата регистрации:
+                </p>
+                <input
+                  :value="registrationDate"
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] w-[70%] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                />
+              </div>
+              <div class="flex justify-between">
+                <p class="h-[40px] w-[30%] text-[#efefef] font-light text-[16px]">
+                  Статус подписки на рассылку:
+                </p>
+                <select
+                  :disabled="!userId"
+                  v-model="selectedClient.newsletter"
+                  class="bg-[#383838] h-[40px] w-[70%] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
+                >
+                  <option value="true">Подписан</option>
+                  <option value="false">Не подписан</option>
+                </select>
+              </div>
+            </div>
+          </div>
           <div class="w-full h-[40px] grid grid-cols-2 grid-rows-1 gap-5 mt-5">
             <button
+              @click="saveChanges"
               class="bg-[#145F37] text-[#efefef] font-light text-[16px] border border-transparent rounded-[10px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#145F37] active:border-[#145F37] transition-all ease-in-out"
             >
               Сохранить

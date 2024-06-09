@@ -11,7 +11,6 @@ const selectedQuestion = ref(null) // Переменная для хранени
 
 const updateselectedQuestion = (order) => {
   selectedQuestion.value = order
-  console.log(selectedQuestion.value)
 }
 
 const onClickQuestion = (question) => {

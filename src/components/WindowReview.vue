@@ -1,7 +1,43 @@
 <script setup>
-import { inject } from 'vue'
+import { inject, ref, onMounted } from 'vue'
+import axios from 'axios'
 
 const { selectedReview, closeReviewWindow } = inject('review')
+
+const user = ref([])
+const fullName = ref('')
+
+const fetchUser = async () => {
+  try {
+    const { data } = await axios.get(
+      `http://localhost:3000/users?id=${selectedReview.value.userId}`
+    )
+    user.value = data.map((obj) => ({
+      ...obj
+    }))
+    if (user.value.length > 0) {
+      fullName.value = user.value[0].fullName
+    }
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+onMounted(async () => {
+  await fetchUser()
+})
+
+const saveChanges = async () => {
+  try {
+    await axios.patch(`http://localhost:3000/reviews/${selectedReview.value.id}`, {
+      isActive: selectedReview.value.isActive,
+      message: selectedReview.value.message
+    })
+    closeReviewWindow()
+  } catch (err) {
+    console.log(err)
+  }
+}
 </script>
 
 <template>
@@ -35,9 +71,63 @@ const { selectedReview, closeReviewWindow } = inject('review')
           </svg>
         </div>
         <div class="h-full w-full flex flex-col">
-          <div class="w-full h-full flex-1 flex-col overflow-auto">Review</div>
+          <div class="w-full h-full flex-1 flex-col overflow-auto">
+            <div class="grid grid-cols-3 grid-rows-1 gap-2">
+              <div class="flex flex-col gap-5">
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Отзыв #</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">ФИО пользователя:</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Товар:</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Рейтинг:</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Статус публикации:</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Сообщение:</p>
+              </div>
+              <div class="flex flex-col gap-5 col-span-2">
+                <input
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                  :value="selectedReview.id"
+                />
+                <input
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                  :value="fullName"
+                />
+                <input
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                  :value="selectedReview.product"
+                />
+                <input
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                  :value="selectedReview.rating"
+                />
+
+                <select
+                  v-model="selectedReview.isActive"
+                  class="bg-[#383838] h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
+                >
+                  <option :value="true">Активен</option>
+                  <option :value="false">Не активен</option>
+                </select>
+                <textarea
+                  v-model="selectedReview.message"
+                  name=""
+                  id=""
+                  cols="30"
+                  rows="5"
+                  class="bg-transparent break-all overflow-auto text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
+                ></textarea>
+              </div>
+            </div>
+          </div>
           <div class="w-full h-[40px] grid grid-cols-2 grid-rows-1 gap-5 mt-5">
             <button
+              @click="saveChanges"
               class="bg-[#145F37] text-[#efefef] font-light text-[16px] border border-transparent rounded-[10px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#145F37] active:border-[#145F37] transition-all ease-in-out"
             >
               Сохранить

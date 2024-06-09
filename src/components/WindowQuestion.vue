@@ -1,7 +1,20 @@
 <script setup>
 import { inject } from 'vue'
 
+import axios from 'axios'
+
 const { selectedQuestion, closeQuestionWindow } = inject('question')
+
+const saveChanges = async () => {
+  try {
+    await axios.patch(`http://localhost:3000/blank/${selectedQuestion.value.id}`, {
+      isChecked: selectedQuestion.value.isChecked
+    })
+    closeQuestionWindow()
+  } catch (err) {
+    console.log(err)
+  }
+}
 </script>
 
 <template>
@@ -35,9 +48,64 @@ const { selectedQuestion, closeQuestionWindow } = inject('question')
           </svg>
         </div>
         <div class="h-full w-full flex flex-col">
-          <div class="w-full h-full flex-1 flex-col overflow-auto">Question</div>
+          <div class="w-full h-full flex-1 flex-col overflow-auto">
+            <div class="grid grid-cols-3 grid-rows-1 gap-2">
+              <div class="flex flex-col gap-5">
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Вопрос #</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Имя отправителя:</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Почта:</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Дата:</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Статус вопроса:</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Сообщение:</p>
+              </div>
+              <div class="flex flex-col gap-5 col-span-2">
+                <input
+                  :value="selectedQuestion.id"
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                />
+                <input
+                  :value="selectedQuestion.name"
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                />
+                <input
+                  :value="selectedQuestion.email"
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                />
+                <input
+                  :value="selectedQuestion.date"
+                  type="text"
+                  disabled
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                />
+
+                <select
+                  v-model="selectedQuestion.isChecked"
+                  class="bg-[#383838] h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
+                >
+                  <option :value="true">Отвечен</option>
+                  <option :value="false">Не отвечен</option>
+                </select>
+                <textarea
+                  :value="selectedQuestion.message"
+                  name=""
+                  id=""
+                  cols="30"
+                  rows="5"
+                  disabled
+                  class="bg-transparent break-all overflow-auto text-center text-[#efefef] font-light text-[16px] border border-[#2C2C2C] rounded-[5px]"
+                ></textarea>
+              </div>
+            </div>
+          </div>
           <div class="w-full h-[40px] grid grid-cols-2 grid-rows-1 gap-5 mt-5">
             <button
+              @click="saveChanges"
               class="bg-[#145F37] text-[#efefef] font-light text-[16px] border border-transparent rounded-[10px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#145F37] active:border-[#145F37] transition-all ease-in-out"
             >
               Сохранить
