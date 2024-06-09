@@ -3,6 +3,7 @@ import { ref, onMounted, provide, computed, watch, reactive } from 'vue'
 
 import axios from 'axios'
 import debounce from 'lodash.debounce'
+import Datepicker from 'vue3-datepicker'
 
 import CardListOrder from './CardListOrder.vue'
 import WindowOrder from './WindowOrder.vue'
@@ -17,6 +18,8 @@ const deliverySelect = ref(null)
 const defaultSort = 'id'
 const defaultOrder = 'asc'
 const priceSort = 'totalPrice'
+const selectedDate = ref(null)
+const format = 'yyyy-MM-dd'
 
 const filters = reactive({
   sort: defaultSort,
@@ -31,6 +34,7 @@ const clearCategory = async () => {
   filters.sort = defaultSort
   filters.order = defaultOrder
   filters.DeliveryProcess = ''
+  selectedDate.value = null
   sortSelect.value.value = `${defaultSort}`
   deliverySelect.value.value = ``
 }
@@ -88,9 +92,15 @@ provide('order', {
 
 const fetchOrders = async () => {
   try {
+    let formattedDate = null
+    if (selectedDate.value) {
+      const date = new Date(selectedDate.value)
+      formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+    }
     const params = {
       _sort: filters.sort,
-      _order: filters.order
+      _order: filters.order,
+      DeliveryDate: formattedDate
     }
 
     if (filters.searchQuerry) {
@@ -125,22 +135,37 @@ const totalRevenue = computed(() => {
 })
 
 watch(filters, fetchOrders)
+watch(selectedDate, fetchOrders)
 </script>
 
 <template>
   <WindowOrder v-if="orderWindowOpen" />
   <div class="h-svh min-h-[700px] w-full p-10">
     <div class="w-full h-full flex flex-col gap-5">
-      <div class="w-full flex gap-5 h-[60px] bg-[#383838]">
-        <div class="relative mb-5 h-[40px] w-[400px] flex items-center">
-          <img class="find_icon absolute pl-5" src="/Images/search.svg" alt="Search" />
-          <input
-            ref="searchInput"
-            @input="onChangeSearchInput"
-            class="find_box h-full w-full text-center text-[#efefef] font-light text-[16px] bg-[#2C2C2C] border border-[#383838] rounded-[5px]"
-            placeholder="Поиск"
-            type="text"
-          />
+      <div class="w-full flex gap-5 h-[100px] bg-[#383838]">
+        <div class="w-[400px]">
+          <div class="relative mb-5 h-[40px] flex items-center">
+            <img class="find_icon absolute pl-5" src="/Images/search.svg" alt="Search" />
+            <input
+              ref="searchInput"
+              @input="onChangeSearchInput"
+              class="find_box h-full w-full text-center text-[#efefef] font-light text-[16px] bg-[#2C2C2C] border border-[#383838] rounded-[5px]"
+              placeholder="Поиск"
+              type="text"
+            />
+          </div>
+
+          <select
+            ref="deliverySelect"
+            @change="onChangeDeliveryProcess"
+            class="select_filter h-[40px] w-full text-center text-[#efefef] font-light text-[16px] bg-[#2C2C2C] border border-[#383838] rounded-[5px]"
+          >
+            <option value="">Все статусы</option>
+            <option value="Отменен">Отменен</option>
+            <option value="Ожидает подтверждения">Ожидает подтверждения</option>
+            <option value="Заказ отправлен">Заказ отправлен</option>
+            <option value="Заказ получен">Заказ получен</option>
+          </select>
         </div>
         <div class="h-[40px] w-[400px]">
           <select
@@ -153,18 +178,15 @@ watch(filters, fetchOrders)
             <option :value="`${priceSort}&_order=desc`">По цене (дорогие)</option>
           </select>
         </div>
-        <div class="h-[40px] w-[400px]">
-          <select
-            ref="deliverySelect"
-            @change="onChangeDeliveryProcess"
-            class="select_filter h-full w-full text-center text-[#efefef] font-light text-[16px] bg-[#2C2C2C] border border-[#383838] rounded-[5px]"
-          >
-            <option value="">Все статусы</option>
-            <option value="Отменен">Отменен</option>
-            <option value="Ожидает подтверждения">Ожидает подтверждения</option>
-            <option value="Заказ отправлен">Заказ отправлен</option>
-            <option value="Заказ получен">Заказ получен</option>
-          </select>
+        <div class="h-[40px] w-[400px] flex flex-col gap-5">
+          <div class="">
+            <datepicker
+              v-model="selectedDate"
+              placeholder="Выберите дату"
+              :format="format"
+              class="h-[40px] w-[400px] text-center text-[#efefef] font-light text-[16px] bg-[#2C2C2C] border border-[#383838] rounded-[5px]"
+            ></datepicker>
+          </div>
         </div>
         <button
           @click="clearCategory"

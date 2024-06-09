@@ -137,7 +137,7 @@ watch(selectedDate, fetchItems)
   <WindowReview v-if="reviewWindowOpen" />
   <div class="h-svh min-h-[700px] w-full p-10">
     <div class="w-full h-full flex flex-col gap-5">
-      <div class="w-full flex gap-5 h-[120px] bg-[#383838]">
+      <div class="w-full flex gap-5 h-[100px] bg-[#383838]">
         <div class="w-[400px] flex flex-col">
           <div class="relative mb-5 w-[400px] flex items-center">
             <img class="find_icon absolute pl-5" src="/Images/search.svg" alt="Search" />
@@ -187,7 +187,7 @@ watch(selectedDate, fetchItems)
       </div>
 
       <div
-        class="bg-[#2C2C2C] h-[calc(100%-140px)] rounded-[30px] hover:shadow-2xl transition-all ease-in-out flex flex-col p-5 gap-5"
+        class="bg-[#2C2C2C] h-[calc(100%-80px)] rounded-[30px] hover:shadow-2xl transition-all ease-in-out flex flex-col p-5 gap-5"
       >
         <div class="w-full flex justify-between">
           <h2 class="text-[#efefef] font-bold text-[20px]">Отзывы</h2>
