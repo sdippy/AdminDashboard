@@ -146,7 +146,7 @@ watch(filters, fetchItems)
           </div>
           <button
             @click="openCategoryAddWindow"
-            class="h-[40px] w-[250px] bg-[#145F37] active:bg-[#efefef] active:text-[#145F37] border border-transparent hover:border-[#efefef] transition-all ease-in-out text-[#efefef] font-light text-[16px] rounded-[5px]"
+            class="h-[40px] w-full bg-[#145F37] active:bg-[#efefef] active:text-[#145F37] border border-transparent hover:border-[#efefef] transition-all ease-in-out text-[#efefef] font-light text-[16px] rounded-[5px]"
           >
             Создать
           </button>
