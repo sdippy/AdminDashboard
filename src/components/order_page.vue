@@ -174,6 +174,7 @@ watch(selectedDate, fetchOrders)
             class="select_filter h-full w-full text-center text-[#efefef] font-light text-[16px] bg-[#2C2C2C] border border-[#383838] rounded-[5px]"
           >
             <option value="id">По id (По возрастанию)</option>
+            <option value="id&_order=desc">По id (По убыванию)</option>
             <option :value="priceSort">По цене (дешевые)</option>
             <option :value="`${priceSort}&_order=desc`">По цене (дорогие)</option>
           </select>

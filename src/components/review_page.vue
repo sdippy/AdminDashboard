@@ -166,6 +166,7 @@ watch(selectedDate, fetchItems)
             class="select_filter h-[40px] w-full text-center text-[#efefef] font-light text-[16px] bg-[#2C2C2C] border border-[#383838] rounded-[5px]"
           >
             <option value="id">По id (По возрастанию)</option>
+            <option value="id&_order=desc">По id (По убыванию)</option>
             <option :value="title">По наименованию (По возрастанию)</option>
             <option :value="`${title}&_order=desc`">По наименованию (По убыванию)</option>
           </select>
