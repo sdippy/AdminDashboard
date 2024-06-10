@@ -35,7 +35,40 @@ const { selectedCategory, closeCategoryWindow } = inject('category')
           </svg>
         </div>
         <div class="h-full w-full flex flex-col">
-          <div class="w-full h-full flex-1 flex-col overflow-auto">Category</div>
+          <div class="w-full h-full flex-1 flex-col overflow-auto">
+            <div class="grid grid-cols-3 grid-rows-1 gap-2">
+              <div class="flex flex-col gap-5">
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Категория #</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Наименование:</p>
+                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Картинка:</p>
+              </div>
+              <div class="flex flex-col gap-5 col-span-2">
+                <input
+                  v-model="selectedCategory.id"
+                  type="text"
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
+                />
+                <input
+                  v-model="selectedCategory.title"
+                  type="text"
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
+                />
+                <input
+                  v-model="selectedCategory.imageUrl"
+                  type="text"
+                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
+                />
+                <div class="border border-[#efefef] flex justify-center">
+                  <img :src="selectedCategory.imageUrl" alt="img_category" class="w-[300px]" />
+                </div>
+                <button
+                  class="bg-[#2A1A58] h-[40px] text-[#efefef] font-light text-[16px] border border-transparent rounded-[10px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#2A1A58] active:border-[#2A1A58] transition-all ease-in-out"
+                >
+                  Изменить картинку
+                </button>
+              </div>
+            </div>
+          </div>
           <div class="w-full h-[40px] grid grid-cols-2 grid-rows-1 gap-5 mt-5">
             <button
               class="bg-[#145F37] text-[#efefef] font-light text-[16px] border border-transparent rounded-[10px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#145F37] active:border-[#145F37] transition-all ease-in-out"

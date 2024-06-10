@@ -199,7 +199,7 @@ watch(selectedDate, fetchOrders)
         </div>
         <button
           @click="clearCategory"
-          class="h-[40px] w-[250px] bg-[#2C2C2C] active:bg-[#efefef] active:text-[#2C2C2C] hover:bg-[#efefef] hover:text-[#2C2C2C] transition-all ease-in-out text-[#efefef] font-light text-[16px] rounded-[5px]"
+          class="h-[40px] w-[250px] bg-[#2C2C2C] active:bg-[#efefef] active:text-[#2C2C2C] border border-transparent hover:border-[#efefef] transition-all ease-in-out text-[#efefef] font-light text-[16px] rounded-[5px]"
         >
           Очистить фильтры
         </button>
