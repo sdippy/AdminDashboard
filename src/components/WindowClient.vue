@@ -33,7 +33,6 @@ const fetchUser = async () => {
   } catch (err) {
     console.log(err)
   }
-  console.log(register.value)
 }
 
 onMounted(async () => {
