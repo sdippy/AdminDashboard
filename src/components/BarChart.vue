@@ -39,9 +39,12 @@ onMounted(() => {
         {
           label: 'Покупки',
           data: Object.values(props.month_data),
-          backgroundColor: 'rgba(217, 79, 95, 1)',
-          borderColor: 'rgba(217, 79, 95, 1)',
-          borderWidth: 1
+          backgroundColor: ['rgba(217, 79, 95, 1)', 'rgba(61, 44, 141, 1)'],
+          borderColor: ['rgba(217, 79, 95, 1)', 'rgba(61, 44, 141, 1)'],
+          borderRadius: 40,
+          borderWidth: 1,
+          borderSkipped: false,
+          maxBarThickness: 50
         }
       ]
     },

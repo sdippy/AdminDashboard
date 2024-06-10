@@ -1,3 +1,13 @@
+<script setup>
+import { inject } from 'vue'
+
+const userSession = sessionStorage.getItem('userSession')
+
+const administratorRights = userSession === 'admin'
+
+const { openExitWindow } = inject('exit')
+</script>
+
 <template>
   <div class="flex flex-col w-[400px] h-svh min-h-[700px] bg-[#2C2C2C] shadow-2xl">
     <div class="ml-10 flex flex-col h-full">
@@ -144,7 +154,7 @@
         </div>
       </div>
       <div class="exit mb-10 flex flex-col gap-[20px]">
-        <div class="flex items-center gap-[10px] link_group2">
+        <div class="flex items-center gap-[10px] link_group2" v-if="administratorRights">
           <svg
             width="20"
             height="20"
@@ -186,11 +196,13 @@
             />
           </svg>
 
-          <a
+          <p
+            @click="openExitWindow"
             href="#"
-            class="link text-[#B9B9B9] hover:text-[#efefef] transition-all ease-in-out font-medium text-[20px]"
-            >Выход</a
+            class="link text-[#B9B9B9] hover:text-[#efefef] transition-all ease-in-out font-medium text-[20px] cursor-pointer"
           >
+            Выход
+          </p>
         </div>
       </div>
     </div>

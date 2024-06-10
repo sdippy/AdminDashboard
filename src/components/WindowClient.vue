@@ -12,7 +12,9 @@ import axios from 'axios'
 
 const { selectedClient, closeClientWindow } = inject('client')
 
-const userId = localStorage.getItem('userId')
+const userSession = sessionStorage.getItem('userSession')
+
+const administratorRights = userSession === 'admin'
 
 const register = ref([])
 const registrationDate = ref('')
@@ -101,7 +103,7 @@ const saveChanges = async () => {
                 </p>
 
                 <textarea
-                  :disabled="!userId"
+                  :disabled="!administratorRights"
                   v-model="selectedClient.fullName"
                   name=""
                   id=""
@@ -113,7 +115,7 @@ const saveChanges = async () => {
               <div class="flex justify-between">
                 <p class="h-[40px] text-[#efefef] w-[30%] font-light text-[16px]">Почта:</p>
                 <textarea
-                  :disabled="!userId"
+                  :disabled="!administratorRights"
                   v-model="selectedClient.email"
                   name=""
                   id=""
@@ -138,7 +140,7 @@ const saveChanges = async () => {
                   Статус подписки на рассылку:
                 </p>
                 <select
-                  :disabled="!userId"
+                  :disabled="!administratorRights"
                   v-model="selectedClient.newsletter"
                   class="bg-[#383838] h-[40px] w-[70%] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] disabled:border-[#2C2C2C] rounded-[5px]"
                 >
@@ -149,7 +151,7 @@ const saveChanges = async () => {
               <div class="flex justify-between">
                 <p class="h-[40px] w-[30%] text-[#efefef] font-light text-[16px]">Роль:</p>
                 <select
-                  :disabled="!userId"
+                  :disabled="!administratorRights"
                   v-model="selectedClient.role"
                   class="bg-[#383838] h-[40px] w-[70%] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px] disabled:border-[#2C2C2C]"
                 >

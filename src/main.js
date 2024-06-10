@@ -13,6 +13,7 @@ import sneaker_page from './components/sneaker_page.vue'
 import review_page from './components/review_page.vue'
 import client_page from './components/client_page.vue'
 import question_page from './components/question_page.vue'
+import Auth from './components/Auth.vue'
 
 const app = createApp(App)
 
@@ -23,7 +24,23 @@ const routes = [
   { path: '/Sneaker', name: 'Sneaker', component: sneaker_page },
   { path: '/Review', name: 'Review', component: review_page },
   { path: '/Client', name: 'Client', component: client_page },
-  { path: '/Question', name: 'Question', component: question_page }
+  { path: '/Question', name: 'Question', component: question_page },
+  {
+    path: '/Auth',
+    name: 'Auth',
+    component: Auth,
+    meta: { hideNavigation: true },
+    beforeEnter: (to, from, next) => {
+      const userSession = sessionStorage.getItem('userSession')
+      // Если пользователь уже авторизован, перенаправляем его на главную страницу
+      if (userSession) {
+        router.back()
+      } else {
+        // Если пользователь не авторизован, разрешаем доступ к странице входа
+        next()
+      }
+    }
+  }
 ]
 
 const router = createRouter({
