@@ -5,6 +5,7 @@ import debounce from 'lodash.debounce'
 
 import CardListCategory from './CardListCategory.vue'
 import WindowCategory from './WindowCategory.vue'
+import WindowCategoryAdd from './WindowCategoryAdd.vue'
 
 // Массив категорий
 const categories = ref([])
@@ -50,7 +51,6 @@ const onChangeSearchInput = debounce((event) => {
 
 const updateselectedCategory = (order) => {
   selectedCategory.value = order
-  console.log(selectedCategory.value)
 }
 
 const onClickCategory = (category) => {
@@ -74,10 +74,27 @@ const openCategoryWindow = () => {
   document.body.style.overflow = 'hidden'
 }
 
+const categoryWindowAddOpen = ref(false)
+
+const closeCategoryAddWindow = async () => {
+  categoryWindowAddOpen.value = false
+  document.body.style.overflow = ''
+  document.body.style.paddingRight = ''
+  load()
+}
+
+const openCategoryAddWindow = () => {
+  load()
+  categoryWindowAddOpen.value = true
+  document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`
+  document.body.style.overflow = 'hidden'
+}
+
 provide('category', {
   onClickCategory,
   selectedCategory,
-  closeCategoryWindow
+  closeCategoryWindow,
+  closeCategoryAddWindow
 })
 
 const fetchItems = async () => {
@@ -112,6 +129,7 @@ watch(filters, fetchItems)
 
 <template>
   <WindowCategory v-if="categoryWindowOpen" />
+  <WindowCategoryAdd v-if="categoryWindowAddOpen" />
   <div class="h-svh min-h-[700px] w-full p-10">
     <div class="w-full h-full flex flex-col gap-5">
       <div class="w-full flex gap-5 h-[100px] bg-[#383838]">
@@ -127,6 +145,7 @@ watch(filters, fetchItems)
             />
           </div>
           <button
+            @click="openCategoryAddWindow"
             class="h-[40px] w-[250px] bg-[#145F37] active:bg-[#efefef] active:text-[#145F37] border border-transparent hover:border-[#efefef] transition-all ease-in-out text-[#efefef] font-light text-[16px] rounded-[5px]"
           >
             Создать

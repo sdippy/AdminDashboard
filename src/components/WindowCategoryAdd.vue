@@ -3,17 +3,20 @@ import { inject, ref } from 'vue'
 
 import axios from 'axios'
 
-const { selectedCategory, closeCategoryWindow } = inject('category')
+const { closeCategoryAddWindow } = inject('category')
 
 const fileInputRef = ref(null)
 
 const fileName = ref('')
+const imageUrl = ref('')
+const title = ref('')
+const message = ref('')
 
 const handleFileChange = (event) => {
   const file = event.target.files[0]
   if (file) {
-    fileName.value = file.name
-    selectedCategory.value.imageUrl = `/Images/Categories/${fileName.value}`
+    fileName.value = file.name // Присваиваем правильное имя файла
+    imageUrl.value = `/Images/Categories/${fileName.value}` // Формируем путь к изображению
   }
 }
 
@@ -22,30 +25,27 @@ const triggerFileInput = () => {
 }
 
 const saveChanges = async () => {
-  try {
-    await axios.patch(`http://localhost:3000/categories/${selectedCategory.value.id}`, {
-      imageUrl: selectedCategory.value.imageUrl,
-      title: selectedCategory.value.title
-    })
-    closeCategoryWindow()
-  } catch (err) {
-    console.log(err)
-  }
-}
-
-const deleteCategory = async () => {
-  try {
-    await axios.delete(`http://localhost:3000/categories/${selectedCategory.value.id}`)
-    closeCategoryWindow()
-  } catch (err) {
-    console.log(err)
+  if (title.value && imageUrl.value) {
+    // Проверяем, что оба поля заполнены
+    try {
+      // Отправляем данные на сервер
+      await axios.post('http://localhost:3000/categories', {
+        imageUrl: imageUrl.value,
+        title: title.value
+      })
+      closeCategoryAddWindow() // Закрываем окно после успешного сохранения
+    } catch (err) {
+      console.log(err) // Обрабатываем ошибку при сохранении
+    }
+  } else {
+    message.value = 'Пожалуйста, заполните все поля' // Выводим предупреждение, если поля не заполнены
   }
 }
 </script>
 
 <template>
   <div
-    @click="closeCategoryWindow"
+    @click="closeCategoryAddWindow"
     class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-30"
   ></div>
   <div
@@ -53,13 +53,10 @@ const deleteCategory = async () => {
   >
     <div class="w-full h-full">
       <!-- very-small -->
-      <div
-        v-if="selectedCategory"
-        class="product-window flex flex-col gap-5 w-full h-full p-10 bg-[#383838]"
-      >
+      <div class="product-window flex flex-col gap-5 w-full h-full p-10 bg-[#383838]">
         <div class="flex justify-end w-full">
           <svg
-            @click="closeCategoryWindow"
+            @click="closeCategoryAddWindow"
             class="cursor-pointer opacity-60 hover:opacity-100 hover:-translate-y-1 transition-all ease-in-out"
             width="20"
             height="20"
@@ -77,28 +74,22 @@ const deleteCategory = async () => {
           <div class="w-full h-full flex-1 flex-col overflow-auto">
             <div class="grid grid-cols-3 grid-rows-1 gap-2">
               <div class="flex flex-col gap-5">
-                <p class="h-[40px] text-[#efefef] font-light text-[16px]">Категория #</p>
                 <p class="h-[40px] text-[#efefef] font-light text-[16px]">Наименование:</p>
                 <p class="h-[40px] text-[#efefef] font-light text-[16px]">Картинка:</p>
               </div>
               <div class="flex flex-col gap-5 col-span-2">
                 <input
-                  v-model="selectedCategory.id"
+                  v-model="title"
                   type="text"
                   class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
                 />
                 <input
-                  v-model="selectedCategory.title"
-                  type="text"
-                  class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
-                />
-                <input
-                  v-model="selectedCategory.imageUrl"
+                  v-model="imageUrl"
                   type="text"
                   class="bg-transparent break-all h-[40px] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
                 />
                 <div class="border border-[#efefef] flex justify-center">
-                  <img :src="selectedCategory.imageUrl" alt="img_category" class="w-[300px]" />
+                  <img :src="imageUrl" alt="img_category" class="w-[300px]" />
                 </div>
                 <button
                   @click="triggerFileInput"
@@ -106,6 +97,7 @@ const deleteCategory = async () => {
                 >
                   Выбрать файл
                 </button>
+                <p v-if="message" class="text-red-500 font-light text-[16px]">{{ message }}</p>
 
                 <!-- Hidden file input element -->
                 <input ref="fileInputRef" type="file" class="hidden" @change="handleFileChange" />
@@ -114,22 +106,14 @@ const deleteCategory = async () => {
           </div>
           <div class="w-full h-[40px] grid grid-cols-2 grid-rows-1 gap-5 mt-5">
             <button
-              @click="deleteCategory"
-              class="bg-[#5F1414] col-start-2 text-[#efefef] h-[40px] font-light text-[16px] border border-transparent rounded-[5px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#5F1414] active:border-[#5F1414] transition-all ease-in-out"
-            >
-              Удалить категорию
-            </button>
-          </div>
-          <div class="w-full h-[40px] grid grid-cols-2 grid-rows-1 gap-5 mt-5">
-            <button
               @click="saveChanges"
-              class="bg-[#145F37] h-[40px] text-[#efefef] font-light text-[16px] border border-transparent rounded-[10px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#145F37] active:border-[#145F37] transition-all ease-in-out"
+              class="bg-[#145F37] text-[#efefef] font-light text-[16px] border border-transparent rounded-[10px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#145F37] active:border-[#145F37] transition-all ease-in-out"
             >
               Сохранить
             </button>
             <button
-              @click="closeCategoryWindow"
-              class="bg-[#2C2C2C] h-[40px] text-[#efefef] font-light text-[16px] border border-transparent rounded-[10px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#2c2c2c] active:border-[#2c2c2c] transition-all ease-in-out"
+              @click="closeCategoryAddWindow"
+              class="bg-[#2C2C2C] text-[#efefef] font-light text-[16px] border border-transparent rounded-[10px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#2c2c2c] active:border-[#2c2c2c] transition-all ease-in-out"
             >
               Отмена
             </button>
