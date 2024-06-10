@@ -1,15 +1,24 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch, defineProps } from 'vue'
 import { Chart, registerables } from 'chart.js'
+
+// Определяем пропсы
+const props = defineProps({
+  month_data: {
+    type: Object,
+    required: true
+  }
+})
 
 // Регистрируем компоненты Chart.js
 Chart.register(...registerables)
 
 const chartCanvas = ref(null)
+let chart = null
 
 onMounted(() => {
   const ctx = chartCanvas.value.getContext('2d')
-  new Chart(ctx, {
+  chart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: [
@@ -29,9 +38,9 @@ onMounted(() => {
       datasets: [
         {
           label: 'Покупки',
-          data: [2, 1, 2, 3, 5, 4, 0, 0, 0, 0, 0, 0],
-          backgroundColor: ['rgba(217, 79, 95, 1)', 'rgba(61, 44, 141, 1)'],
-          borderColor: ['rgba(217, 79, 95, 1)', 'rgba(61, 44, 141, 1)'],
+          data: Object.values(props.month_data),
+          backgroundColor: 'rgba(217, 79, 95, 1)',
+          borderColor: 'rgba(217, 79, 95, 1)',
           borderWidth: 1
         }
       ]
@@ -45,6 +54,16 @@ onMounted(() => {
     }
   })
 })
+
+// Наблюдаем за изменением данных и обновляем график
+watch(
+  () => props.month_data,
+  (newValue) => {
+    chart.data.datasets[0].data = Object.values(newValue)
+    chart.update()
+  },
+  { deep: true }
+)
 </script>
 
 <template>

@@ -15,6 +15,7 @@ defineProps({
       :email="item.email"
       :full-name="item.fullName"
       :newsletter="item.newsletter"
+      :role="item.role"
     />
   </div>
 </template>

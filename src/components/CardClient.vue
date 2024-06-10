@@ -7,18 +7,20 @@ const props = defineProps({
   id: Number,
   email: String,
   fullName: String,
-  newsletter: String
+  newsletter: String,
+  role: String
 })
 </script>
 
 <template>
   <div
-    @click="onClickClient({ id, email, fullName, newsletter })"
+    @click="onClickClient({ id, email, fullName, newsletter, role })"
     class="client w-full items-center flex text-[#B9B9B9] font-light text-[16px] cursor-pointer border border-transparent hover:border-[#B9B9B9] transition-all ease-in-out"
   >
     <span class="w-[100px] break-all"># {{ id }}</span>
     <span class="w-[400px] break-all">{{ fullName }}</span>
-    <span class="w-[700px] break-all">{{ email }}</span>
+    <span class="w-[500px] break-all">{{ email }}</span>
+    <span class="w-[100px] break-all">{{ role }}</span>
 
     <span class="btn items-center">
       <svg

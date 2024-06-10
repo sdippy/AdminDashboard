@@ -13,6 +13,20 @@ import CardListOrder from './CardListOrder.vue'
 import WindowOrder from './WindowOrder.vue'
 
 const orders = ref([])
+const month_data = ref({
+  January: 0,
+  February: 0,
+  March: 0,
+  April: 0,
+  May: 0,
+  June: 0,
+  July: 0,
+  August: 0,
+  September: 0,
+  October: 0,
+  November: 0,
+  December: 0
+})
 const ordersTotal = ref([])
 const ordersNumber = ref(0)
 const usersNumber = ref(0)
@@ -60,7 +74,6 @@ const fetchOrders = async () => {
     orders.value = data.map((order) => ({
       ...order
     }))
-    ordersNumber.value = data.length
   } catch (err) {
     console.log(err)
   }
@@ -68,7 +81,8 @@ const fetchOrders = async () => {
 
 const fetchOrders_1 = async () => {
   try {
-    const { data } = await axios.get(`http://localhost:3000/orders`)
+    const { data } = await axios.get(`http://localhost:3000/orders?DeliveryProcess_ne=Отменен`)
+    ordersNumber.value = data.length
 
     ordersTotal.value = data.map((order) => ({
       ...order
@@ -77,6 +91,44 @@ const fetchOrders_1 = async () => {
     console.log(err)
   }
 }
+
+// fetch chart data
+
+const fetchMonthlyOrders = async () => {
+  try {
+    const response = await axios.get(
+      'http://localhost:3000/orders?_sort=id&_order=asc&DeliveryProcess_ne=Отменен'
+    )
+    const data = response.data
+
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ]
+
+    months.forEach((month, index) => {
+      const monthData = data.filter((order) => {
+        const orderDate = new Date(order.DeliveryDate)
+        return orderDate.getMonth() === index && orderDate.getFullYear() === 2024
+      })
+      month_data.value[month] = monthData.length
+    })
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+// fetch chart data
 
 const fetchUsers = async () => {
   try {
@@ -92,6 +144,8 @@ onMounted(async () => {
   await fetchOrders()
   await fetchUsers()
   await fetchOrders_1()
+
+  await fetchMonthlyOrders()
 })
 
 const load = async () => {
@@ -152,7 +206,7 @@ const totalRevenue = computed(() => {
         <div
           class="col-span-2 bg-[#2C2C2C] h-[300px] rounded-[30px] flex justify-center hover:shadow-2xl hover:-translate-y-1 transition-all ease-in-out"
         >
-          <BarChart_component />
+          <BarChart_component :month_data="month_data" />
         </div>
         <div
           class="col-start-3 h-[300px] bg-[#2C2C2C] rounded-[30px] flex justify-center hover:shadow-2xl hover:-translate-y-1 transition-all ease-in-out"

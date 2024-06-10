@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, provide, computed, watch, reactive } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 import axios from 'axios'
 import debounce from 'lodash.debounce'
@@ -7,6 +8,9 @@ import Datepicker from 'vue3-datepicker'
 
 import CardListOrder from './CardListOrder.vue'
 import WindowOrder from './WindowOrder.vue'
+
+const router = useRouter()
+const route = useRoute()
 
 const orders = ref([])
 const ordersNumber = ref(0)
@@ -25,7 +29,8 @@ const filters = reactive({
   sort: defaultSort,
   order: defaultOrder,
   searchQuerry: '',
-  DeliveryProcess: ''
+  DeliveryProcess: '',
+  user: route.query.user || null
 })
 
 const clearCategory = async () => {
@@ -37,6 +42,8 @@ const clearCategory = async () => {
   selectedDate.value = null
   sortSelect.value.value = `${defaultSort}`
   deliverySelect.value.value = ``
+  filters.user = null
+  router.push({ path: '/Order' })
 }
 
 const onChangeSelect = (event) => {
@@ -100,7 +107,8 @@ const fetchOrders = async () => {
     const params = {
       _sort: filters.sort,
       _order: filters.order,
-      DeliveryDate: formattedDate
+      DeliveryDate: formattedDate,
+      userId: filters.user
     }
 
     if (filters.searchQuerry) {

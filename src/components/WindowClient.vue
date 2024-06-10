@@ -1,5 +1,12 @@
 <script setup>
 import { inject, ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const navigateToOrders = () => {
+  router.push({ name: 'Order', query: { user: selectedClient.value.id } })
+}
 
 import axios from 'axios'
 
@@ -36,7 +43,8 @@ const saveChanges = async () => {
     await axios.patch(`http://localhost:3000/users/${selectedClient.value.id}`, {
       fullName: selectedClient.value.fullName,
       newsletter: selectedClient.value.newsletter,
-      email: selectedClient.value.email
+      email: selectedClient.value.email,
+      role: selectedClient.value.role
     })
     closeClientWindow()
   } catch (err) {
@@ -51,7 +59,7 @@ const saveChanges = async () => {
     class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-30"
   ></div>
   <div
-    class="orderWindow fixed h-full w-full 2xl:h-4/6 2xl:max-h-[700px] 2xl:w-6/12 2xl:max-w-[1200px] inset-2/4 -translate-x-2/4 -translate-y-2/4 z-20"
+    class="orderWindow fixed h-full w-full 2xl:h-5/6 2xl:max-h-[1000px] 2xl:w-6/12 2xl:max-w-[1200px] inset-2/4 -translate-x-2/4 -translate-y-2/4 z-20"
   >
     <div class="w-full h-full">
       <!-- very-small -->
@@ -99,7 +107,7 @@ const saveChanges = async () => {
                   id=""
                   cols="30"
                   rows="1"
-                  class="bg-transparent break-all w-[70%] overflow-auto text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
+                  class="bg-transparent break-all w-[70%] overflow-auto text-center text-[#efefef] font-light text-[16px] border border-[#efefef] disabled:border-[#2C2C2C] rounded-[5px]"
                 ></textarea>
               </div>
               <div class="flex justify-between">
@@ -111,7 +119,7 @@ const saveChanges = async () => {
                   id=""
                   cols="30"
                   rows="1"
-                  class="bg-transparent break-all w-[70%] overflow-auto text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
+                  class="bg-transparent break-all w-[70%] overflow-auto text-center text-[#efefef] font-light text-[16px] border border-[#efefef] disabled:border-[#2C2C2C] rounded-[5px]"
                 ></textarea>
               </div>
               <div class="flex justify-between">
@@ -132,11 +140,31 @@ const saveChanges = async () => {
                 <select
                   :disabled="!userId"
                   v-model="selectedClient.newsletter"
-                  class="bg-[#383838] h-[40px] w-[70%] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px]"
+                  class="bg-[#383838] h-[40px] w-[70%] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] disabled:border-[#2C2C2C] rounded-[5px]"
                 >
                   <option value="true">Подписан</option>
                   <option value="false">Не подписан</option>
                 </select>
+              </div>
+              <div class="flex justify-between">
+                <p class="h-[40px] w-[30%] text-[#efefef] font-light text-[16px]">Роль:</p>
+                <select
+                  :disabled="!userId"
+                  v-model="selectedClient.role"
+                  class="bg-[#383838] h-[40px] w-[70%] text-center text-[#efefef] font-light text-[16px] border border-[#efefef] rounded-[5px] disabled:border-[#2C2C2C]"
+                >
+                  <option value="user">Пользователь</option>
+                  <option value="manager">Менеджер</option>
+                  <option value="admin">Администратор</option>
+                </select>
+              </div>
+              <div class="flex w-full justify-end">
+                <button
+                  @click="navigateToOrders"
+                  class="flex justify-end w-max h-[40px] text-[#efefef] font-light text-[16px] border-b border-transparent hover:border-[#efefef] transition-all ease-in-out"
+                >
+                  Посмотреть заказы
+                </button>
               </div>
             </div>
           </div>
