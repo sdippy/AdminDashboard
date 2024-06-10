@@ -1,27 +1,42 @@
 <script setup>
-import { onMounted, ref, provide, reactive, watch } from 'vue'
+import { onMounted, ref, provide, watch, reactive } from 'vue'
 import axios from 'axios'
 import debounce from 'lodash.debounce'
+import { useRouter } from 'vue-router'
 
-import CardListCategory from './CardListCategory.vue'
-import WindowCategory from './WindowCategory.vue'
+import CardListClient_component from './CardListClient_component.vue'
+import WindowClient from './WindowAdmin.vue'
+
+const router = useRouter()
+
+const userSession = sessionStorage.getItem('userSession')
+
+const administratorRights = userSession === 'admin'
+
+if (!administratorRights) {
+  window.location.reload()
+
+  router.back()
+}
 
 // Массив категорий
-const categories = ref([])
-const categoriesNumber = ref(0)
-const selectedCategory = ref(null) // Переменная для хранения информации о выбранном бренде
+const users = ref([])
+const usersNumber = ref(0)
+const selectedClient = ref(null) // Переменная для хранения информации о выбранном клиенте
 
 const searchInput = ref(null)
 const titleSort = ref(null)
+const RoleSelect = ref(null)
 
 const defaultSort = 'id'
 const defaultOrder = 'asc'
-const title = 'title'
+const title = 'fullName'
 
 const filters = reactive({
   sort: defaultSort,
   order: defaultOrder,
-  searchQuerry: ''
+  searchQuerry: '',
+  RoleProcess: ''
 })
 
 const onChangeSelect = (event) => {
@@ -36,48 +51,53 @@ const onChangeSelect = (event) => {
   }
 }
 
+const onChangeRoleProcess = (event) => {
+  filters.RoleProcess = event.target.value
+}
+
 const clearCategory = async () => {
   searchInput.value.value = ''
   filters.searchQuerry = ''
   filters.sort = defaultSort
   filters.order = defaultOrder
   titleSort.value.value = `${defaultSort}`
+  filters.RoleProcess = ''
+  RoleSelect.value.value = ``
 }
 
 const onChangeSearchInput = debounce((event) => {
   filters.searchQuerry = event.target.value
 }, 200)
 
-const updateselectedCategory = (order) => {
-  selectedCategory.value = order
-  console.log(selectedCategory.value)
+const updateselectedClient = (order) => {
+  selectedClient.value = order
 }
 
-const onClickCategory = (category) => {
-  updateselectedCategory(category)
-  openCategoryWindow()
+const onClickClient = (client) => {
+  updateselectedClient(client)
+  openClientWindow()
 }
 
-const categoryWindowOpen = ref(false)
+const clientWindowOpen = ref(false)
 
-const closeCategoryWindow = async () => {
-  categoryWindowOpen.value = false
+const closeClientWindow = async () => {
+  clientWindowOpen.value = false
   document.body.style.overflow = ''
   document.body.style.paddingRight = ''
   load()
 }
 
-const openCategoryWindow = () => {
+const openClientWindow = () => {
   load()
-  categoryWindowOpen.value = true
+  clientWindowOpen.value = true
   document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`
   document.body.style.overflow = 'hidden'
 }
 
-provide('category', {
-  onClickCategory,
-  selectedCategory,
-  closeCategoryWindow
+provide('client', {
+  onClickClient,
+  selectedClient,
+  closeClientWindow
 })
 
 const fetchItems = async () => {
@@ -89,11 +109,16 @@ const fetchItems = async () => {
     if (filters.searchQuerry) {
       params.q = filters.searchQuerry
     }
-    const { data } = await axios.get('http://localhost:3000/categories', { params })
-    categories.value = data.map((obj) => ({
+
+    if (filters.RoleProcess) {
+      params.role = filters.RoleProcess
+    }
+
+    const { data } = await axios.get('http://localhost:3000/users?role_ne=user', { params })
+    users.value = data.map((obj) => ({
       ...obj
     }))
-    categoriesNumber.value = data.length
+    usersNumber.value = data.length
   } catch (err) {
     console.log(err)
   }
@@ -111,10 +136,10 @@ watch(filters, fetchItems)
 </script>
 
 <template>
-  <WindowCategory v-if="categoryWindowOpen" />
+  <WindowClient v-if="clientWindowOpen" />
   <div class="h-svh min-h-[700px] w-full p-10">
     <div class="w-full h-full flex flex-col gap-5">
-      <div class="w-full flex gap-5 h-[100px] bg-[#383838]">
+      <div class="w-full flex gap-5 h-[60px] bg-[#383838]">
         <div class="w-[400px] flex flex-col">
           <div class="relative mb-5 w-[400px] flex items-center">
             <img class="find_icon absolute pl-5" src="/Images/search.svg" alt="Search" />
@@ -126,11 +151,6 @@ watch(filters, fetchItems)
               type="text"
             />
           </div>
-          <button
-            class="h-[40px] w-[250px] bg-[#145F37] active:bg-[#efefef] active:text-[#145F37] hover:bg-[#efefef] hover:text-[#145F37] transition-all ease-in-out text-[#efefef] font-light text-[16px] rounded-[5px]"
-          >
-            Создать
-          </button>
         </div>
         <div class="w-[400px]">
           <select
@@ -140,10 +160,20 @@ watch(filters, fetchItems)
           >
             <option value="id">По id (По возрастанию)</option>
             <option value="id&_order=desc">По id (По убыванию)</option>
-            <option :value="title">По наименованию (По возрастанию)</option>
-            <option :value="`${title}&_order=desc`">По наименованию (По убыванию)</option>
+            <option :value="title">По ФИО (По возрастанию)</option>
+            <option :value="`${title}&_order=desc`">По ФИО (По убыванию)</option>
           </select>
         </div>
+
+        <select
+          ref="RoleSelect"
+          @change="onChangeRoleProcess"
+          class="select_filter h-[40px] w-[400px] text-center text-[#efefef] font-light text-[16px] bg-[#2C2C2C] border border-[#383838] rounded-[5px]"
+        >
+          <option value="">Все роли</option>
+          <option value="manager">Менеджер</option>
+          <option value="admin">Администратор</option>
+        </select>
 
         <button
           @click="clearCategory"
@@ -154,21 +184,22 @@ watch(filters, fetchItems)
       </div>
 
       <div
-        class="bg-[#2C2C2C] h-[calc(100%-80px)] rounded-[30px] hover:shadow-2xl transition-all ease-in-out flex flex-col p-5 gap-5"
+        class="bg-[#2C2C2C] h-[calc(100%-40px)] rounded-[30px] hover:shadow-2xl transition-all ease-in-out flex flex-col p-5 gap-5"
       >
         <div class="w-full flex justify-between">
-          <h2 class="text-[#efefef] font-bold text-[20px]">Бренды</h2>
+          <h2 class="text-[#efefef] font-bold text-[20px]">Клиенты</h2>
         </div>
         <div class="w-full flex text-[#B9B9B9] font-light text-[16px]">
-          <span class="w-[100px]">Бренд</span>
-          <span class="w-[400px]">Наименование</span>
-          <span class="w-[150px]">Картинка</span>
+          <span class="w-[100px]">Клиент</span>
+          <span class="w-[400px]">ФИО</span>
+          <span class="w-[500px]">Почта</span>
+          <span class="w-[100px]">Роль</span>
         </div>
         <div class="overflow-auto h-full">
-          <CardListCategory :items="categories" />
+          <CardListClient_component :items="users" />
         </div>
         <div class="h-[30px] w-full flex gap-5 text-[#B9B9B9] font-light text-[16px]">
-          <div>Всего брендов: {{ categoriesNumber }}</div>
+          <div>Всего клиентов: {{ usersNumber }}</div>
         </div>
       </div>
     </div>

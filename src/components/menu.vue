@@ -174,10 +174,11 @@ const { openExitWindow } = inject('exit')
             />
           </svg>
 
-          <a
+          <router-link
+            to="/Admin"
             href="#"
             class="link text-[#B9B9B9] hover:text-[#efefef] transition-all ease-in-out font-medium text-[20px]"
-            >Администрирование</a
+            >Администрирование</router-link
           >
         </div>
         <div class="flex items-center gap-[10px] link_group2">

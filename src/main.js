@@ -13,6 +13,7 @@ import sneaker_page from './components/sneaker_page.vue'
 import review_page from './components/review_page.vue'
 import client_page from './components/client_page.vue'
 import question_page from './components/question_page.vue'
+import admin_page from './components/admin_page.vue'
 import Auth from './components/Auth.vue'
 
 const app = createApp(App)
@@ -25,6 +26,7 @@ const routes = [
   { path: '/Review', name: 'Review', component: review_page },
   { path: '/Client', name: 'Client', component: client_page },
   { path: '/Question', name: 'Question', component: question_page },
+  { path: '/Admin', name: 'Admin', component: admin_page },
   {
     path: '/Auth',
     name: 'Auth',

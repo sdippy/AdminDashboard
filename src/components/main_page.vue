@@ -194,10 +194,10 @@ const totalRevenue = computed(() => {
           <h2 class="text-[#efefef] font-bold text-[20px]">Клиентов</h2>
           <span class="text-[#efefef] font-bold text-[40px]">{{ usersNumber }}</span>
           <div class="flex justify-end">
-            <a
-              href="#"
+            <router-link
+              to="/client"
               class="text-[#efefef] font-bold text-[15px] text-right mr-[20px] border-b border-transparent hover:border-b hover:border-[#efefef] transition-all ease-in-out"
-              >Детали ➔</a
+              >Детали ➔</router-link
             >
           </div>
         </div>
