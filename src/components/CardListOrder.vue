@@ -14,6 +14,7 @@ defineProps({
       :id="item.id"
       :date="item.DeliveryDate"
       :total-price="item.totalPrice"
+      :total-price-discount="item.totalPriceDiscount"
       :delivery="item.DeliveryProcess"
       :userId="item.userId"
       :City="item.City"

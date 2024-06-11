@@ -21,7 +21,9 @@ const fetchItems = async () => {
         quantity: item.quantity,
         size: item.size,
         price: item.price,
-        newprice: item.newprice
+        newprice: item.newprice,
+        totalPrice: item.totalPrice,
+        totalPriceDiscount: item.totalPriceDiscount
       }))
     }))
   } catch (err) {
@@ -48,6 +50,16 @@ const saveChanges = async () => {
     console.log(err)
   }
 }
+
+const printForm = () => {
+  // Показываем форму перед печатью
+  const printableForm = document.getElementById('printableForm')
+  if (printableForm) {
+    window.print() // Запускаем процесс печати
+  } else {
+    alert('Не удалось найти форму для печати.')
+  }
+}
 </script>
 
 <template>
@@ -56,6 +68,7 @@ const saveChanges = async () => {
     class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-30"
   ></div>
   <div
+    id="printableForm"
     class="orderWindow fixed h-full w-full 2xl:h-5/6 2xl:max-h-[1200px] 2xl:w-6/12 2xl:max-w-[1200px] inset-2/4 -translate-x-2/4 -translate-y-2/4 z-20"
   >
     <div class="w-full h-full">
@@ -64,7 +77,7 @@ const saveChanges = async () => {
         v-if="selectedOrder"
         class="product-window flex flex-col gap-5 w-full h-full p-10 bg-[#383838]"
       >
-        <div class="flex justify-end w-full">
+        <div class="flex justify-end w-full hide-on-print">
           <svg
             @click="closeOrderWindow"
             class="cursor-pointer opacity-60 hover:opacity-100 hover:-translate-y-1 transition-all ease-in-out"
@@ -82,7 +95,7 @@ const saveChanges = async () => {
         </div>
         <div class="h-full w-full flex flex-col">
           <div class="w-full h-full flex-1 flex-col overflow-auto">
-            <div class="grid grid-cols-3 grid-rows-1 gap-2">
+            <div class="grid grid-cols-3 grid-rows-1 gap-2 hide-on-print">
               <div class="flex flex-col gap-5">
                 <p class="h-[40px] text-[#efefef] font-light text-[16px]">Заказ #</p>
                 <p class="h-[40px] text-[#efefef] font-light text-[16px]">ФИО заказчика:</p>
@@ -133,10 +146,16 @@ const saveChanges = async () => {
                   <option value="Заказ отправлен">Заказ отправлен</option>
                   <option value="Заказ получен">Заказ получен</option>
                 </select>
+                <button
+                  @click="printForm"
+                  class="hide-on-print text-[#efefef] bg-[#145F37] font-light text-[16px] border-b border-transparent hover:border-[#efefef] transition-all ease-in-out"
+                >
+                  Печать
+                </button>
               </div>
             </div>
-            <div class="w-full h-[240px] overflow-auto bg-[#2C2C2C] mt-5 flex flex-col gap-5">
-              <div class="w-full flex text-[#B9B9B9] font-light text-[16px] p-2">
+            <div class="w-full overflow-auto bg-[#2C2C2C] mt-5 mb-5 flex flex-col gap-5">
+              <div class="w-full flex text-[#B9B9B9] font-light text-[16px] p-2 hide-on-print">
                 <span class="w-[50px]">#</span>
                 <span class="w-[300px]">Наименование</span>
                 <span class="ml-2 w-[150px]">Цена</span>
@@ -144,10 +163,29 @@ const saveChanges = async () => {
                 <span class="w-[100px]">Размер</span>
                 <span class="w-[100px]">Картинка</span>
               </div>
+              <div class="hide flex flex-col gap-5">
+                <div class="flex justify-between items-center border-b-2 border-[black]">
+                  <h2 class="text-[black] text-[28px] font-bold text-left">
+                    Заказ №{{ selectedOrder.id }} от {{ selectedOrder.date }}
+                  </h2>
+                  <span class="text-[black] text-[20px] font-bold">S-Shop</span>
+                </div>
+
+                <span class="text-[black] text-[20px] font-bold"
+                  >Покупатель: {{ selectedOrder.fullName }}</span
+                >
+              </div>
               <CardListWindowOrder :items="flattenedSneakers" />
+
+              <div class="hide flex flex-col gap-5 mt-5">
+                <span class="text-[black] text-[20px] border-b-2 border-[black] w-full"
+                  >Всего наименований: {{ flattenedSneakers.length }}, на сумму:
+                  {{ selectedOrder.totalPrice }} ₽</span
+                >
+              </div>
             </div>
           </div>
-          <div class="w-full h-[40px] grid grid-cols-2 grid-rows-1 gap-5 mt-5">
+          <div class="w-full h-[40px] grid grid-cols-2 grid-rows-1 gap-5 mt-5 mb-5 hide-on-print">
             <button
               @click="saveChanges"
               class="bg-[#145F37] text-[#efefef] font-light text-[16px] border border-transparent rounded-[10px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#145F37] active:border-[#145F37] transition-all ease-in-out"
@@ -166,3 +204,43 @@ const saveChanges = async () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Add a class to hide elements during printing */
+.hide {
+  display: none;
+}
+/* Show the printable form during printing */
+@media print {
+  .hide {
+    display: flex;
+  }
+  .hide-on-print {
+    display: none !important;
+  }
+
+  .border_one {
+    border: 1px solid black;
+    padding: 0;
+  }
+
+  .border_hide {
+    border: none !important;
+    color: black !important;
+    background-color: #fff !important;
+  }
+
+  .gap_hide {
+    gap: 0 !important;
+  }
+
+  .border_one > * {
+    border-right: 1px solid black;
+    padding-left: 8px;
+  }
+
+  .border_one > *:last-child {
+    border-right: none;
+  }
+}
+</style>
