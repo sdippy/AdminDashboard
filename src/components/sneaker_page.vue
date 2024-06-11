@@ -5,6 +5,7 @@ import debounce from 'lodash.debounce'
 
 import CardListSneakers from './CardListSneakers.vue'
 import WindowSneaker from './WindowSneaker.vue'
+import WindowSneakerAdd from './WindowSneakerAdd.vue'
 
 // Массив категорий
 const sneakers = ref([])
@@ -83,10 +84,27 @@ const openSneakerWindow = () => {
   document.body.style.overflow = 'hidden'
 }
 
+const sneakerWindowAddOpen = ref(false)
+
+const closeSneakerAddWindow = async () => {
+  sneakerWindowAddOpen.value = false
+  document.body.style.overflow = ''
+  document.body.style.paddingRight = ''
+  load()
+}
+
+const openSneakerAddWindow = () => {
+  load()
+  sneakerWindowAddOpen.value = true
+  document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`
+  document.body.style.overflow = 'hidden'
+}
+
 provide('sneaker', {
   onClickSneaker,
   selectedSneaker,
-  closeSneakerWindow
+  closeSneakerWindow,
+  closeSneakerAddWindow
 })
 
 const fetchItems = async () => {
@@ -137,6 +155,8 @@ watch(filters, fetchItems)
 
 <template>
   <WindowSneaker v-if="sneakerWindowOpen" />
+  <WindowSneakerAdd v-if="sneakerWindowAddOpen" />
+
   <div class="h-svh min-h-[700px] w-full p-10">
     <div class="w-full h-full flex flex-col gap-5">
       <div class="w-full flex gap-5 h-[100px] bg-[#383838]">
@@ -152,6 +172,7 @@ watch(filters, fetchItems)
             />
           </div>
           <button
+            @click="openSneakerAddWindow"
             class="h-[40px] w-full bg-[#145F37] active:bg-[#efefef] active:text-[#145F37] border border-transparent hover:border-[#efefef] transition-all ease-in-out text-[#efefef] font-light text-[16px] rounded-[5px]"
           >
             Создать

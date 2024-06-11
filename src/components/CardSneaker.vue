@@ -10,7 +10,7 @@ const props = defineProps({
   price: Number,
   newprice: Number,
   discount: Number,
-  discountCategory: String,
+  discountCategory: Boolean,
   description: String,
   imageUrl: String,
   imageUrl2: String,
