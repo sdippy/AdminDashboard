@@ -97,7 +97,7 @@ const saveChanges = async () => {
 
 const deleteSneaker = async () => {
   try {
-    await axios.delete(`http://localhost:3000/categories/${selectedCategory.value.id}`)
+    await axios.delete(`http://localhost:3000/Sneakers/${selectedSneaker.value.id}`)
     closeSneakerWindow()
   } catch (err) {
     console.log(err)
@@ -321,6 +321,14 @@ watch(
                 <input ref="fileInputRef3" type="file" class="hidden" @change="handleFileChange3" />
               </div>
             </div>
+          </div>
+          <div class="w-full h-[40px] grid grid-cols-2 grid-rows-1 gap-5 mt-5">
+            <button
+              @click="deleteSneaker"
+              class="bg-[#5F1414] col-start-2 text-[#efefef] h-[40px] font-light text-[16px] border border-transparent rounded-[5px] hover:border-[#efefef] active:bg-[#efefef] active:text-[#5F1414] active:border-[#5F1414] transition-all ease-in-out"
+            >
+              Удалить товар
+            </button>
           </div>
           <div class="w-full h-[40px] grid grid-cols-2 grid-rows-1 gap-5 mt-5 mb-5">
             <button
