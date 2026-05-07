@@ -109,7 +109,7 @@ const fetchItems = async () => {
     if (filters.ActiveProcess) {
       params.isChecked = filters.ActiveProcess
     }
-    const { data } = await axios.get('http://localhost:3000/blank', { params })
+    const { data } = await axios.get('https://s-shop-production.up.railway.app/blank', { params })
     questions.value = data.map((obj) => ({
       ...obj
     }))

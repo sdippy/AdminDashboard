@@ -22,7 +22,7 @@ const registrationDate = ref('')
 const fetchUser = async () => {
   try {
     const { data } = await axios.get(
-      `http://localhost:3000/register?usersID=${selectedClient.value.id}`
+      `https://s-shop-production.up.railway.app/register?usersID=${selectedClient.value.id}`
     )
     register.value = data.map((obj) => ({
       ...obj
@@ -41,7 +41,7 @@ onMounted(async () => {
 
 const saveChanges = async () => {
   try {
-    await axios.patch(`http://localhost:3000/users/${selectedClient.value.id}`, {
+    await axios.patch(`https://s-shop-production.up.railway.app/users/${selectedClient.value.id}`, {
       fullName: selectedClient.value.fullName,
       newsletter: selectedClient.value.newsletter,
       email: selectedClient.value.email,

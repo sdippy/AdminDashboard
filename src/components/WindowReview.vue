@@ -10,7 +10,7 @@ const fullName = ref('')
 const fetchUser = async () => {
   try {
     const { data } = await axios.get(
-      `http://localhost:3000/users?id=${selectedReview.value.userId}`
+      `https://s-shop-production.up.railway.app/users?id=${selectedReview.value.userId}`
     )
     user.value = data.map((obj) => ({
       ...obj
@@ -29,7 +29,7 @@ onMounted(async () => {
 
 const saveChanges = async () => {
   try {
-    await axios.patch(`http://localhost:3000/reviews/${selectedReview.value.id}`, {
+    await axios.patch(`https://s-shop-production.up.railway.app/reviews/${selectedReview.value.id}`, {
       isActive: selectedReview.value.isActive,
       message: selectedReview.value.message
     })

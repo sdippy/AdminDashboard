@@ -111,7 +111,7 @@ const fetchItems = async () => {
       params.isActive = filters.ActiveProcess
     }
 
-    const { data } = await axios.get('http://localhost:3000/reviews', { params })
+    const { data } = await axios.get('https://s-shop-production.up.railway.app/reviews', { params })
     reviews.value = data.map((obj) => ({
       ...obj
     }))

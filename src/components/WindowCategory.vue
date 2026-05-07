@@ -23,7 +23,7 @@ const triggerFileInput = () => {
 
 const saveChanges = async () => {
   try {
-    await axios.patch(`http://localhost:3000/categories/${selectedCategory.value.id}`, {
+    await axios.patch(`https://s-shop-production.up.railway.app/categories/${selectedCategory.value.id}`, {
       imageUrl: selectedCategory.value.imageUrl,
       title: selectedCategory.value.title
     })

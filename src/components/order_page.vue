@@ -119,7 +119,7 @@ const fetchOrders = async () => {
       params.DeliveryProcess = filters.DeliveryProcess
     }
 
-    const { data } = await axios.get(`http://localhost:3000/orders`, { params })
+    const { data } = await axios.get(`https://s-shop-production.up.railway.app/orders`, { params })
 
     orders.value = data.map((order) => ({
       ...order

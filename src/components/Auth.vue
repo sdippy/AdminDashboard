@@ -31,7 +31,7 @@ const loginUser = async () => {
     const hashedLogin = CryptoJS.SHA512(emailValue).toString()
 
     const userResponse = await axios.get(
-      `http://localhost:3000/users?login=${hashedLogin}&role_ne=user`
+      `https://s-shop-production.up.railway.app/users?login=${hashedLogin}&role_ne=user`
     )
     const userData = userResponse.data
 

@@ -114,7 +114,7 @@ const fetchItems = async () => {
       params.role = filters.RoleProcess
     }
 
-    const { data } = await axios.get('http://localhost:3000/users?role_ne=user', { params })
+    const { data } = await axios.get('https://s-shop-production.up.railway.app/users?role_ne=user', { params })
     users.value = data.map((obj) => ({
       ...obj
     }))

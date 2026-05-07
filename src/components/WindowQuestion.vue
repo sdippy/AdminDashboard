@@ -7,7 +7,7 @@ const { selectedQuestion, closeQuestionWindow } = inject('question')
 
 const saveChanges = async () => {
   try {
-    await axios.patch(`http://localhost:3000/blank/${selectedQuestion.value.id}`, {
+    await axios.patch(`https://s-shop-production.up.railway.app/blank/${selectedQuestion.value.id}`, {
       isChecked: selectedQuestion.value.isChecked
     })
     closeQuestionWindow()

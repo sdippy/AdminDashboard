@@ -106,7 +106,7 @@ const fetchItems = async () => {
     if (filters.searchQuerry) {
       params.q = filters.searchQuerry
     }
-    const { data } = await axios.get('http://localhost:3000/categories', { params })
+    const { data } = await axios.get('https://s-shop-production.up.railway.app/categories', { params })
     categories.value = data.map((obj) => ({
       ...obj
     }))

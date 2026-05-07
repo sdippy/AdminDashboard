@@ -22,7 +22,7 @@ const fullName = ref('')
 
 const fetchUser = async () => {
   try {
-    const { data } = await axios.get(`http://localhost:3000/users?id=${props.userId}`)
+    const { data } = await axios.get(`https://s-shop-production.up.railway.app/users?id=${props.userId}`)
     user.value = data.map((obj) => ({
       ...obj
     }))

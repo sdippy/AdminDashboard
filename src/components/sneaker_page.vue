@@ -121,7 +121,7 @@ const fetchItems = async () => {
       params.category = filters.BrandProcess
     }
 
-    const { data } = await axios.get('http://localhost:3000/sneakers', { params })
+    const { data } = await axios.get('https://s-shop-production.up.railway.app/sneakers', { params })
     sneakers.value = data.map((obj) => ({
       ...obj
     }))
@@ -133,7 +133,7 @@ const fetchItems = async () => {
 
 const fetchCategories = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/categories')
+    const response = await axios.get('https://s-shop-production.up.railway.app/categories')
     categories.value = response.data
   } catch (err) {
     console.log(err)

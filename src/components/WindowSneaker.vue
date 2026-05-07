@@ -9,7 +9,7 @@ const categories = ref([])
 
 const fetchCategories = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/categories')
+    const response = await axios.get('https://s-shop-production.up.railway.app/categories')
     categories.value = response.data
   } catch (err) {
     console.log(err)
@@ -88,7 +88,7 @@ const saveChanges = async () => {
       sneakerData.discount = selectedSneaker.value.discount
     }
 
-    await axios.put(`http://localhost:3000/Sneakers/${selectedSneaker.value.id}`, sneakerData)
+    await axios.put(`https://s-shop-production.up.railway.app/Sneakers/${selectedSneaker.value.id}`, sneakerData)
     closeSneakerWindow()
   } catch (err) {
     console.log(err)
@@ -97,7 +97,7 @@ const saveChanges = async () => {
 
 const deleteSneaker = async () => {
   try {
-    await axios.delete(`http://localhost:3000/Sneakers/${selectedSneaker.value.id}`)
+    await axios.delete(`https://s-shop-production.up.railway.app/Sneakers/${selectedSneaker.value.id}`)
     closeSneakerWindow()
   } catch (err) {
     console.log(err)

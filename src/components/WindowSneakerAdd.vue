@@ -22,7 +22,7 @@ const discount = ref('')
 
 const fetchCategories = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/categories')
+    const response = await axios.get('https://s-shop-production.up.railway.app/categories')
     categories.value = response.data
   } catch (err) {
     console.log(err)
@@ -114,7 +114,7 @@ const saveChanges = async () => {
       }
 
       // Отправка данных на сервер
-      await axios.post('http://localhost:3000/sneakers', sneakerData)
+      await axios.post('https://s-shop-production.up.railway.app/sneakers', sneakerData)
 
       // Закрываем окно после успешного сохранения
       closeSneakerAddWindow()

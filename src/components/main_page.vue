@@ -67,7 +67,7 @@ provide('order', {
 const fetchOrders = async () => {
   try {
     const { data } = await axios.get(
-      `http://localhost:3000/orders?DeliveryProcess=Ожидает подтверждения`
+      `https://s-shop-production.up.railway.app/orders?DeliveryProcess=Ожидает подтверждения`
     )
 
     orders.value = data.map((order) => ({
@@ -80,7 +80,7 @@ const fetchOrders = async () => {
 
 const fetchOrders_1 = async () => {
   try {
-    const { data } = await axios.get(`http://localhost:3000/orders?DeliveryProcess_ne=Отменен`)
+    const { data } = await axios.get(`https://s-shop-production.up.railway.app/orders?DeliveryProcess_ne=Отменен`)
     ordersNumber.value = data.length
 
     ordersTotal.value = data.map((order) => ({
@@ -96,7 +96,7 @@ const fetchOrders_1 = async () => {
 const fetchMonthlyOrders = async () => {
   try {
     const response = await axios.get(
-      'http://localhost:3000/orders?_sort=id&_order=asc&DeliveryProcess_ne=Отменен'
+      'https://s-shop-production.up.railway.app/orders?_sort=id&_order=asc&DeliveryProcess_ne=Отменен'
     )
     const data = response.data
 
@@ -131,7 +131,7 @@ const fetchMonthlyOrders = async () => {
 
 const fetchUsers = async () => {
   try {
-    const { data } = await axios.get(`http://localhost:3000/users`)
+    const { data } = await axios.get(https://s-shop-production.up.railway.app/users`)
 
     usersNumber.value = data.length
   } catch (err) {

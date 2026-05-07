@@ -29,7 +29,7 @@ const saveChanges = async () => {
     // Проверяем, что оба поля заполнены
     try {
       // Отправляем данные на сервер
-      await axios.post('http://localhost:3000/categories', {
+      await axios.post('https://s-shop-production.up.railway.app/categories', {
         imageUrl: imageUrl.value,
         title: title.value
       })

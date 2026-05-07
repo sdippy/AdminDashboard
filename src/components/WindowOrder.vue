@@ -11,7 +11,7 @@ const orders = ref([])
 
 const fetchItems = async () => {
   try {
-    const { data } = await axios.get(`http://localhost:3000/orders?id=${selectedOrder.value.id}`)
+    const { data } = await axios.get(`https://s-shop-production.up.railway.app/orders?id=${selectedOrder.value.id}`)
     orders.value = data.map((obj) => ({
       ...obj,
       sneakers: obj.items.map((item) => ({
@@ -42,7 +42,7 @@ const flattenedSneakers = computed(() => {
 
 const saveChanges = async () => {
   try {
-    await axios.patch(`http://localhost:3000/orders/${selectedOrder.value.id}`, {
+    await axios.patch(`https://s-shop-production.up.railway.app/orders/${selectedOrder.value.id}`, {
       DeliveryProcess: selectedOrder.value.delivery
     })
     closeOrderWindow()
