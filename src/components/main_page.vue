@@ -131,7 +131,7 @@ const fetchMonthlyOrders = async () => {
 
 const fetchUsers = async () => {
   try {
-    const { data } = await axios.get(https://s-shop-production.up.railway.app/users`)
+    const { data } = await axios.get(`https://s-shop-production.up.railway.app/users`)
 
     usersNumber.value = data.length
   } catch (err) {
