@@ -35,7 +35,7 @@ const saveChanges = async () => {
 
 const deleteCategory = async () => {
   try {
-    await axios.delete(`http://localhost:3000/categories/${selectedCategory.value.id}`)
+    await axios.delete(`https://s-shop-production.up.railway.app/categories/${selectedCategory.value.id}`)
     closeCategoryWindow()
   } catch (err) {
     console.log(err)
